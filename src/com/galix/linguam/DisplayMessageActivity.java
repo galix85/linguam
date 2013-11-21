@@ -1,4 +1,6 @@
-package com.galix.lingus;
+package com.galix.linguam;
+
+import com.galix.lingus.R;
 
 import android.os.Bundle;
 import android.app.Activity;

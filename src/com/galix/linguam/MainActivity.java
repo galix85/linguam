@@ -1,4 +1,7 @@
-package com.galix.lingus;
+package com.galix.linguam;
+
+import com.galix.linguam.api.Wordreference;
+import com.galix.lingus.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -33,5 +37,13 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
-
+	public void translateButtonAction(View view){
+		EditText editText = (EditText) findViewById(R.id.editText);
+		String word = editText.getText().toString();
+		Wordreference wordrefCon = new Wordreference("");
+	    String translatedWord = wordrefCon.callWordReferenceTranslation(word);
+		TextView resultTranslate = (TextView) findViewById(R.id.textView);
+		resultTranslate.setText(translatedWord);
+	}
+	
 }
