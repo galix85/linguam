@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+	android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:baselineAligned="false"
+    tools:context=".MainActivity" >
+
+    <LinearLayout android:layout_gravity="top"
+    	android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+    	    
+    	  <Button
+    	      android:id="@+id/play"
+    	      android:layout_width="match_parent"
+    	      android:layout_height="wrap_content"
+    	      android:text="@string/playgame_button" />
+    	    
+    	</LinearLayout>
+    
+    	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:layout_weight="10" >
+    		
+
+    		<TextView
+    		    android:id="@+id/result_translate"
+    		    android:layout_width="match_parent"
+    		    android:layout_height="wrap_content"
+    		    android:text="TextView"
+    		    android:visibility="invisible" />
+
+    	</LinearLayout>
+    	  
+    
+    	
+    
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:layout_weight="1" >
+       	
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter a word"
+            android:imeOptions="actionSend"
+            android:inputType="text" 
+            android:layout_gravity="bottom"
+            android:layout_weight="0"/>
+        
+
+    
+
+        <Button
+            android:id="@+id/translate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:onClick="translate"
+            android:layout_weight="0"
+            android:text="@string/tanslate_button" />
+    </LinearLayout>        
+    
+
+    
+</LinearLayout>

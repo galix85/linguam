@@ -6,4 +6,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_display_message">My Message</string>
 
+    <string name="tanslate_button">Translate</string>
+    <string name="playgame_button">Play</string>
+	<string name="translate_word_hint">Type a word</string>
+
+    
 </resources>
