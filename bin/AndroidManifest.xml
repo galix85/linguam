@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.galix.linguam.DisplayMessageActivity"
+            android:name="com.galix.linguam.APIWordReference"
             android:label="@string/title_activity_display_message"
             android:parentActivityName="com.galix.linguam.MainActivity" >
             <meta-data

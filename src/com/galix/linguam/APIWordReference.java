@@ -11,7 +11,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 
-public class DisplayMessageActivity extends Activity {
+public class APIWordReference extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

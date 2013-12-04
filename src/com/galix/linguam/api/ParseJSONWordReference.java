@@ -6,7 +6,7 @@ import java.util.*;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
-public class ParseSONWordReference {
+public class ParseJSONWordReference {
 
    public static class Term {
       String term;
@@ -66,7 +66,7 @@ public class ParseSONWordReference {
 
    }
 
-   public void getTranslation(String jsonLine) {
+   public String getTranslation(String jsonLine) {
          
       JsonParser jp = new JsonParser();
       JsonElement je = jp.parse(jsonLine);
@@ -74,8 +74,8 @@ public class ParseSONWordReference {
       JsonElement je3 = je2.getAsJsonObject().get("PrincipalTranslations");
 
       //List of objects to persist
-      List<ParseSONWordReference.Term> firstTranslationList = new ArrayList<ParseSONWordReference.Term>();
-      List<ParseSONWordReference.Term> originalTermList = new ArrayList<ParseSONWordReference.Term>();
+      List<ParseJSONWordReference.Term> firstTranslationList = new ArrayList<ParseJSONWordReference.Term>();
+      List<ParseJSONWordReference.Term> originalTermList = new ArrayList<ParseJSONWordReference.Term>();
           
       Type mapType = new TypeToken<Map<String, Item>>() {}.getType();
       Map<String, Item> principalTranslation = new Gson().fromJson(je3, mapType);
@@ -87,6 +87,7 @@ public class ParseSONWordReference {
   		 originalTermList.add(item.OriginalTerm);
   	  }
       
+      return firstTranslationList.get(0).getTerm().toString();
    }
 
 }
