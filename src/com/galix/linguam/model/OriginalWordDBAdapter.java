@@ -3,7 +3,7 @@ package com.galix.linguam.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.galix.linguam.api.ParseJSONWordReference.Term;
+import com.galix.linguam.controller.ParseJSONWordReference.Term;
 import com.galix.linguam.pojo.OriginalWord;
 
 import android.content.ContentValues;

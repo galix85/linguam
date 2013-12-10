@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.galix.lingus"
+    package="com.galix.linguam"
     android:versionCode="1"
     android:versionName="1.0" >
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
@@ -28,7 +28,7 @@
             android:parentActivityName="com.galix.linguam.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.galix.lingus.MainActivity" />
+                android:value="com.galix.linguam.MainActivity" />
         </activity>
     </application>
 
