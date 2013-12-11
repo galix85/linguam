@@ -1,4 +1,4 @@
-package com.galix.linguam.model;
+package com.galix.linguam.db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class OriginalWordDBAdapter {
 
+	/**
+	 * Singleton instance of {@link ScrobblerQueueDao}.
+	 */
+	private static OriginalWordDBAdapter instance = null;
+	
   // Database fields
   private SQLiteDatabase database;
   private MySQLiteHelper dbHelper;
@@ -22,9 +27,23 @@ public class OriginalWordDBAdapter {
       MySQLiteHelper.COLUMN_ORIGINALWORD_SENSE,MySQLiteHelper.COLUMN_ORIGINALWORD_TERM,
       MySQLiteHelper.COLUMN_ORIGINALWORD_USAGE};
 
-  public OriginalWordDBAdapter(Context context) {
+ /* public OriginalWordDBAdapter(Context context) {
     dbHelper = new MySQLiteHelper(context);
-  }
+  }*/
+  
+	/**
+	 * @return the {@link RecentStationsDao} singleton instance.
+	 */
+	public static OriginalWordDBAdapter getInstance() 
+	{
+		if(instance != null) {
+			return instance;
+		} 
+		else {
+			instance = new OriginalWordDBAdapter();
+			return instance;
+		}
+	}
 
   public void open() throws SQLException {
     database = dbHelper.getWritableDatabase();

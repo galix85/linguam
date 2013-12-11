@@ -1,4 +1,4 @@
-package com.galix.linguam;
+package com.galix.linguam.activity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -18,9 +18,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.galix.linguam.R;
 import com.galix.linguam.controller.ParseJSONWordReference;
-import com.galix.linguam.model.OriginalWordDBAdapter;
-import com.galix.linguam.model.TranslationDBAdapter;
+import com.galix.linguam.db.OriginalWordDBAdapter;
+import com.galix.linguam.db.TranslationDBAdapter;
 
 public class MainActivity extends Activity {
 

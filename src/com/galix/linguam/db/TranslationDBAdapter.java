@@ -1,4 +1,4 @@
-package com.galix.linguam.model;
+package com.galix.linguam.db;
 
 import java.util.ArrayList;
 import java.util.List;

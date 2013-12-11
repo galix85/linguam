@@ -1,4 +1,4 @@
-package com.galix.linguam;
+package com.galix.linguam.activity;
 
 import com.galix.linguam.R;
 

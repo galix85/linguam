@@ -1,4 +1,6 @@
-package com.galix.linguam.model;
+package com.galix.linguam.db;
+
+import com.galix.linguam.LinguamApplication;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,11 +8,29 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
-/*      String term;
-      String POS;
-      String sense;
-      String usage;
- * */
+	/**
+	 * Singleton instance of {@link ScrobblerQueueDao}.
+	 */
+	private static MySQLiteHelper instance = null;
+
+	/** 
+	 * @return the {@link ScrobblerQueueDao} singleton.
+	 */
+	public static MySQLiteHelper getInstance() 
+	{
+		if(instance != null) {
+			return instance;
+		} 
+		else {
+			return new MySQLiteHelper();
+		}
+	}
+	
+	public void clearDatabase()
+	{
+		OriginalWordDBAdapter.getInstance().clearTable();
+
+	}
 
   public static final String TABLE_TRANSLATION = "translation";
   public static final String COLUMN_TRANSLATION_ID = "_id";
@@ -53,11 +73,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      + ", " + COLUMN_ORIGINALWORD_USAGE
      + " text);";
 
-  public MySQLiteHelper(Context context) {
-    super(context, DATABASE_NAME, null, DATABASE_VERSION);
-  }
 
-  @Override
+@Override
   public void onCreate(SQLiteDatabase database) {
     database.execSQL(CREATE_TABLE_TRANSLATION);
     database.execSQL(CREATE_TABLE_ORIGINALWORD);
