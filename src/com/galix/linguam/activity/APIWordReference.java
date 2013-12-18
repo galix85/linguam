@@ -22,7 +22,7 @@ public class APIWordReference extends Activity {
 		
 		// Get the message from the intent
 	    Intent intent = getIntent();
-	    String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+	    String message = intent.getStringExtra(Home.EXTRA_MESSAGE);
 
 	    // Create the text view
 	    TextView textView = new TextView(this);

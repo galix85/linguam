@@ -1,6 +1,7 @@
 package com.galix.linguam.pojo;
 
 public class OriginalWord {
+	
 	int id;
 	String term;
     String POS;

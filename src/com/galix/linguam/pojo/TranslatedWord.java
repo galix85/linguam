@@ -1,6 +1,6 @@
 package com.galix.linguam.pojo;
 
-public class TranslationWord {
+public class TranslatedWord {
 	
 	int id;
 	String term;
