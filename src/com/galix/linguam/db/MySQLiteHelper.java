@@ -13,6 +13,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_TRANSLATION_POS = "pos";
 	public static final String COLUMN_TRANSLATION_SENSE = "sense";
 	public static final String COLUMN_TRANSLATION_USAGE = "usage";
+	public static final String COLUMN_TRANSLATION_SELECTED = "selected";
 
 	public static final String TABLE_ORIGINALWORD = "originalword";
 	public static final String COLUMN_ORIGINALWORD_ID = "_id";
@@ -22,7 +23,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_ORIGINALWORD_USAGE = "usage";
 
 	private static final String DATABASE_NAME = "linguam.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 3;
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_TRANSLATION = "create table "
@@ -30,7 +31,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ " integer primary key autoincrement, " + COLUMN_TRANSLATION_TERM
 			+ " text not null" + ", " + COLUMN_TRANSLATION_POS + " text" + ", "
 			+ COLUMN_TRANSLATION_SENSE + " text" + ", "
-			+ COLUMN_TRANSLATION_USAGE + " text);";
+			+ COLUMN_TRANSLATION_USAGE + " text" + ", "
+			+ COLUMN_TRANSLATION_SELECTED + " integer);";
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_ORIGINALWORD = "create table "
@@ -39,6 +41,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ " text not null" + ", " + COLUMN_ORIGINALWORD_POS + " text"
 			+ ", " + COLUMN_ORIGINALWORD_SENSE + " text" + ", "
 			+ COLUMN_ORIGINALWORD_USAGE + " text);";
+	
 
 	/**
 	 * Constructor should be private to prevent direct instantiation. make call
@@ -59,6 +62,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 		Log.w(MySQLiteHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORIGINALWORD);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSLATION);
 		onCreate(db);
 	}

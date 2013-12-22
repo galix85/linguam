@@ -11,15 +11,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -27,15 +26,17 @@ import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
 import com.galix.linguam.db.OriginalWordDBAdapter;
 import com.galix.linguam.db.TranslationDBAdapter;
+import com.galix.linguam.pojo.TranslatedWord;
 import com.galix.linguam.util.WordReferenceUtil;
 import com.galix.linguam.util.WordReferenceUtil.Term;
 
 public class Home extends Activity {
 
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-	private String translatedWord;
+	
 	private static OriginalWordDBAdapter originalWordDB;
 	private static TranslationDBAdapter translatedWordDB;
+	
 	private String url_base = "http://api.wordreference.com/0.8/6cd19/json";
 	private String languageSource = "en";
 	private String languageTo = "es";
@@ -45,10 +46,8 @@ public class Home extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		wrUtil = new WordReferenceUtil();
-		originalWordDB = new OriginalWordDBAdapter(
-				LinguamApplication.appContext);
-		translatedWordDB = new TranslationDBAdapter(
-				LinguamApplication.appContext);
+		originalWordDB = new OriginalWordDBAdapter(LinguamApplication.getContext());
+		translatedWordDB = new TranslationDBAdapter(LinguamApplication.getContext());
 		LinguamApplication.init();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
@@ -57,7 +56,6 @@ public class Home extends Activity {
 	public JsonObjectRequest callWR(String word) {
 		
 		JsonObjectRequest jsObjRequest = null;
-		translatedWord = null;
 
 		try {
 			// Encode word to translate
@@ -73,12 +71,39 @@ public class Home extends Activity {
 						public void onResponse(JSONObject response) {
 
 							try {
-								translatedWord = wrUtil
+								hashmapResponse = wrUtil
 										.parseJSON(response.toString());
 								TextView result_translate = (TextView) findViewById(R.id.result_translate);
-								result_translate.setText(translatedWord
-										.toString());
-								result_translate.setVisibility(1);
+								//Get both response WR lists from hashmap
+								List<Term> firstTranslation = hashmapResponse.get("firstTranslation");
+								List<Term> originalTerm = hashmapResponse.get("originalTerm");
+								
+								int firstTranslationSize = firstTranslation.size();
+								//int originalTermSize = originalTerm.size();
+								
+								//Insert to DB
+								for (Term translation : firstTranslation) {
+									 if (--firstTranslationSize == 0) {
+										 translatedWordDB.createTranslation(translation,true);
+									 }else{
+										 translatedWordDB.createTranslation(translation,false);
+									 }
+								}
+								for (Term originalWord : originalTerm) {
+										originalWordDB.createOriginalWord(originalWord);
+								}
+								
+								//result_translate.setText(hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString());
+								//result_translate.setVisibility(1);
+								
+								
+								List<TranslatedWord> allTranslates = translatedWordDB.getAllTranslates();
+								/*ArrayAdapter<TranslatedWord> adapter = new ArrayAdapter<TranslatedWord>(LinguamApplication.getContext(), R.layout.main_layout, allTranslates);
+								
+								ListView lview = (ListView) findViewById(R.id.listview);
+								lview.setAdapter(adapter);
+								lview.setVisibility(1);*/
+								
 								// findViewById(R.id.progressBar1).setVisibility(View.GONE);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block

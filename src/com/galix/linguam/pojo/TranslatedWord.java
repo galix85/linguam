@@ -7,6 +7,7 @@ public class TranslatedWord {
     String POS;
     String sense;
     String usage;
+    int selected;
 	
     public int getId() {
 		return id;
@@ -39,11 +40,18 @@ public class TranslatedWord {
 	public void setUsage(String usage) {
 		this.usage = usage;
 	}
+	public int getSelected() {
+		return selected;
+	}
+	public void setSelected(int selected) {
+		this.selected = selected;
+	}
 	
 	@Override
 	public String toString() {
 		return "TranslationWord [term=" + term + ", POS=" + POS + ", sense="
 				+ sense + ", usage=" + usage + "]";
 	}
+
     
 } 

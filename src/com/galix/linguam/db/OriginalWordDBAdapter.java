@@ -25,6 +25,7 @@ public class OriginalWordDBAdapter {
 
 	public OriginalWordDBAdapter(Context context) {
 	    dbHelper = new MySQLiteHelper(context);
+	    database = dbHelper.getWritableDatabase(); 
 	}
 
 	public OriginalWord createOriginalWord(Term originalWord) {
@@ -32,13 +33,13 @@ public class OriginalWordDBAdapter {
 		ContentValues values = new ContentValues();
 
 		values.put(MySQLiteHelper.COLUMN_ORIGINALWORD_POS,
-				originalWord.getPOS());
+				originalWord.getPOS() == null ? "Empty Pos" : originalWord.getPOS());
 		values.put(MySQLiteHelper.COLUMN_ORIGINALWORD_SENSE,
-				originalWord.getSense());
+				originalWord.getSense() == null ? "Empty Sense" : originalWord.getSense());
 		values.put(MySQLiteHelper.COLUMN_ORIGINALWORD_TERM,
 				originalWord.getTerm());
 		values.put(MySQLiteHelper.COLUMN_ORIGINALWORD_USAGE,
-				originalWord.getUsage());
+				originalWord.getUsage() == null ? "Empty Usage" : originalWord.getUsage());
 
 		long insertId = database.insert(MySQLiteHelper.TABLE_ORIGINALWORD,
 				null, values);

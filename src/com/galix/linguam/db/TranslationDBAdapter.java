@@ -21,23 +21,28 @@ public class TranslationDBAdapter {
 			MySQLiteHelper.COLUMN_TRANSLATION_POS,
 			MySQLiteHelper.COLUMN_TRANSLATION_SENSE,
 			MySQLiteHelper.COLUMN_TRANSLATION_TERM,
-			MySQLiteHelper.COLUMN_TRANSLATION_USAGE };
+			MySQLiteHelper.COLUMN_TRANSLATION_USAGE,
+			MySQLiteHelper.COLUMN_TRANSLATION_SELECTED};
 
 	public TranslationDBAdapter(Context context) {
 		dbHelper = new MySQLiteHelper(context);
+		database = dbHelper.getWritableDatabase(); 
 	}
 
-	public TranslatedWord createTranslation(Term translation) {
+	public TranslatedWord createTranslation(Term translation,boolean selected) {
 
 		ContentValues values = new ContentValues();
 
-		values.put(MySQLiteHelper.COLUMN_TRANSLATION_POS, translation.getPOS());
+		
+		values.put(MySQLiteHelper.COLUMN_TRANSLATION_POS, translation.getPOS() == null ? "Empty Pos" : translation.getPOS());
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_SENSE,
-				translation.getSense());
+				translation.getSense() == null ? "Empty Sense" : translation.getSense());
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_TERM,
 				translation.getTerm());
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_USAGE,
-				translation.getUsage());
+				translation.getUsage() == null ? "Empty Usage" : translation.getUsage());
+		values.put(MySQLiteHelper.COLUMN_TRANSLATION_SELECTED,
+			    selected ? 1 : 0);
 
 		long insertId = database.insert(MySQLiteHelper.TABLE_TRANSLATION, null,
 				values);
@@ -74,6 +79,25 @@ public class TranslationDBAdapter {
 		return translationWords;
 	}
 
+	public String selectedTranslation(){
+		
+		String[] fields = new String[] {"term"};
+		String[] args = new String[] {"1"};
+		 
+		Cursor c = database.query(MySQLiteHelper.TABLE_TRANSLATION, fields, MySQLiteHelper.COLUMN_TRANSLATION_SELECTED+"=?",
+				args, null, null, null);
+		
+		//Nos aseguramos de que existe al menos un registro
+		if (c.moveToFirst()) {
+		     //Recorremos el cursor hasta que no haya m‡s registros
+		     do {
+		          return c.getString(0);
+		     } while(c.moveToNext());
+		}else{
+			return null;
+		}
+	}
+	
 	private TranslatedWord cursorToTranslate(Cursor cursor) {
 		TranslatedWord translation = new TranslatedWord();
 		translation.setId((int) cursor.getLong(0));

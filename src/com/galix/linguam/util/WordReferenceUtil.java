@@ -1,29 +1,11 @@
 package com.galix.linguam.util;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
-import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.galix.linguam.LinguamApplication;
-import com.galix.linguam.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -89,13 +71,10 @@ public class WordReferenceUtil {
 		}
 
 	}
-
-	private String url_base = "http://api.wordreference.com/0.8/6cd19/json";
-	private String languageSource = "en";
-	private String languageTo = "es";
+	
 	public HashMap<String, List<Term>> hashmapResponse;
 
-	public String parseJSON(
+	public HashMap<String, List<Term>> parseJSON(
 			String jsonLine) throws Exception {
 
 		HashMap<String, List<WordReferenceUtil.Term>> hashRequestWRList = new HashMap<String, List<WordReferenceUtil.Term>>();
@@ -120,6 +99,7 @@ public class WordReferenceUtil {
 		for (Item item : list) {
 			firstTranslationList.add(item.FirstTranslation);
 			originalTermList.add(item.OriginalTerm);
+			
 		}
 
 		// TODO hash-map with two lists
@@ -130,9 +110,11 @@ public class WordReferenceUtil {
 			hashRequestWRList.put("originalTerm", originalTermList);
 		}
 
-		//return hashRequestWRList;
-		// return
-		return firstTranslationList.get(firstTranslationList.size()-1).getTerm().toString();
+		hashRequestWRList.keySet();
+		
+		return hashRequestWRList;
+		//return firstTranslationList; 
+		//return firstTranslationList.get(firstTranslationList.size()-1).getTerm().toString();
 
 	}
 
