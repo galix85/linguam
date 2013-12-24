@@ -9,12 +9,14 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -67,6 +69,8 @@ public class Home extends Activity {
 			jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
 					new Response.Listener<JSONObject>() {
 
+						private long originalWordId;
+
 						@Override
 						public void onResponse(JSONObject response) {
 
@@ -81,28 +85,27 @@ public class Home extends Activity {
 								int firstTranslationSize = firstTranslation.size();
 								//int originalTermSize = originalTerm.size();
 								
+								originalWordId = originalWordDB.createOriginalWord(originalTerm.get(originalTerm.size()-1));
+								
+//								for (Term originalWord : originalTerm) {
+//									originalWordId = originalWordDB.createOriginalWord(originalWord);
+//								}
 								//Insert to DB
 								for (Term translation : firstTranslation) {
 									 if (--firstTranslationSize == 0) {
-										 translatedWordDB.createTranslation(translation,true);
+										 translatedWordDB.createTranslation(translation,true,originalWordId);
 									 }else{
-										 translatedWordDB.createTranslation(translation,false);
+										 translatedWordDB.createTranslation(translation,false,originalWordId);
 									 }
 								}
-								for (Term originalWord : originalTerm) {
-										originalWordDB.createOriginalWord(originalWord);
-								}
 								
+								String translated_word = hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString();
+								Toast toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is: " + translated_word, Toast.LENGTH_LONG);
+								toast.show();
 								//result_translate.setText(hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString());
 								//result_translate.setVisibility(1);
 								
-								
-								List<TranslatedWord> allTranslates = translatedWordDB.getAllTranslates();
-								/*ArrayAdapter<TranslatedWord> adapter = new ArrayAdapter<TranslatedWord>(LinguamApplication.getContext(), R.layout.main_layout, allTranslates);
-								
-								ListView lview = (ListView) findViewById(R.id.listview);
-								lview.setAdapter(adapter);
-								lview.setVisibility(1);*/
+					
 								
 								// findViewById(R.id.progressBar1).setVisibility(View.GONE);
 							} catch (Exception e) {

@@ -29,7 +29,7 @@ public class TranslationDBAdapter {
 		database = dbHelper.getWritableDatabase(); 
 	}
 
-	public TranslatedWord createTranslation(Term translation,boolean selected) {
+	public long createTranslation(Term translation,boolean selected,long originalWordId) {
 
 		ContentValues values = new ContentValues();
 
@@ -43,16 +43,12 @@ public class TranslationDBAdapter {
 				translation.getUsage() == null ? "Empty Usage" : translation.getUsage());
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_SELECTED,
 			    selected ? 1 : 0);
+		values.put(MySQLiteHelper.COLUMN_TRANSLATION_ORIGINALWORD_FK,
+				originalWordId != 0 ? originalWordId : 0);
 
 		long insertId = database.insert(MySQLiteHelper.TABLE_TRANSLATION, null,
 				values);
-		Cursor cursor = database.query(MySQLiteHelper.TABLE_TRANSLATION,
-				allColumns, MySQLiteHelper.COLUMN_TRANSLATION_ID + " = "
-						+ insertId, null, null, null, null);
-		cursor.moveToFirst();
-		TranslatedWord newTranslation = cursorToTranslate(cursor);
-		cursor.close();
-		return newTranslation;
+		return insertId;
 	}
 
 	public void deleteTranslation(TranslatedWord translation) {

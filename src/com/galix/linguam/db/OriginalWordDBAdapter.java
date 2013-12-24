@@ -28,7 +28,7 @@ public class OriginalWordDBAdapter {
 	    database = dbHelper.getWritableDatabase(); 
 	}
 
-	public OriginalWord createOriginalWord(Term originalWord) {
+	public long createOriginalWord(Term originalWord) {
 
 		ContentValues values = new ContentValues();
 
@@ -43,14 +43,8 @@ public class OriginalWordDBAdapter {
 
 		long insertId = database.insert(MySQLiteHelper.TABLE_ORIGINALWORD,
 				null, values);
-		Cursor cursor = database.query(MySQLiteHelper.TABLE_ORIGINALWORD,
-				allColumns, MySQLiteHelper.COLUMN_ORIGINALWORD_ID + " = "
-						+ insertId, null, null, null, null);
 		
-		cursor.moveToFirst();
-		OriginalWord newOriginalWord = cursorToOriginalWord(cursor);
-		cursor.close();
-		return newOriginalWord;
+		return insertId;
 	}
 
 	public void deleteOriginalWord(OriginalWord originalWord) {
