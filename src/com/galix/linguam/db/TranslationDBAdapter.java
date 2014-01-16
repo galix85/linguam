@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class TranslationDBAdapter {
 
@@ -44,15 +45,23 @@ public class TranslationDBAdapter {
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_SELECTED,
 			    selected ? 1 : 0);
 
-		long insertId = database.insert(MySQLiteHelper.TABLE_TRANSLATION, null,
-				values);
-		Cursor cursor = database.query(MySQLiteHelper.TABLE_TRANSLATION,
-				allColumns, MySQLiteHelper.COLUMN_TRANSLATION_ID + " = "
-						+ insertId, null, null, null, null);
-		cursor.moveToFirst();
-		TranslatedWord newTranslation = cursorToTranslate(cursor);
-		cursor.close();
-		return newTranslation;
+		if (!exist(translation.getTerm(),translation.getPOS(),translation.getSense())){
+			
+			long insertId = database.insert(MySQLiteHelper.TABLE_TRANSLATION, null,
+					values);
+			Cursor cursor = database.query(MySQLiteHelper.TABLE_TRANSLATION,
+					allColumns, MySQLiteHelper.COLUMN_TRANSLATION_ID + " = "
+							+ insertId, null, null, null, null);
+			cursor.moveToFirst();
+			TranslatedWord newTranslation = cursorToTranslate(cursor);
+			cursor.close();
+			return newTranslation;
+			
+		}else{
+			
+			return null;
+		
+		}
 	}
 
 	public void deleteTranslation(TranslatedWord translation) {
@@ -79,23 +88,25 @@ public class TranslationDBAdapter {
 		return translationWords;
 	}
 
-	public String selectedTranslation(){
+	public boolean exist(String term, String pos, String sense) {
+	    
+		boolean result = false;
 		
-		String[] fields = new String[] {"term"};
-		String[] args = new String[] {"1"};
-		 
-		Cursor c = database.query(MySQLiteHelper.TABLE_TRANSLATION, fields, MySQLiteHelper.COLUMN_TRANSLATION_SELECTED+"=?",
-				args, null, null, null);
-		
-		//Nos aseguramos de que existe al menos un registro
-		if (c.moveToFirst()) {
-		     //Recorremos el cursor hasta que no haya m‡s registros
-		     do {
-		          return c.getString(0);
-		     } while(c.moveToNext());
-		}else{
-			return null;
-		}
+    	String selection = "term=? AND pos=? AND sense=?";
+    	String[] selectionArgs = {term,pos,sense};
+    	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
+    	Cursor c = database.query(tableName, null, selection, selectionArgs, null, null, null);
+        if (c != null && c.getCount() != 0) {
+        	Log.v("TranslationDBAdapter - getCount", "Exist");
+            result = true;
+        }else{
+        	Log.v("TranslationWordDBAdapter - getCount", "Not Exist");
+	        result = false;
+	        
+        }
+        c.close();
+        return result;
+
 	}
 	
 	private TranslatedWord cursorToTranslate(Cursor cursor) {

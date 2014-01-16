@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -81,6 +82,9 @@ public class Home extends Activity {
 								int firstTranslationSize = firstTranslation.size();
 								//int originalTermSize = originalTerm.size();
 								
+								originalWordDB.createOriginalWord(originalTerm.get(originalTerm.size()-1));
+	
+								
 								//Insert to DB
 								for (Term translation : firstTranslation) {
 									 if (--firstTranslationSize == 0) {
@@ -89,20 +93,11 @@ public class Home extends Activity {
 										 translatedWordDB.createTranslation(translation,false);
 									 }
 								}
-								for (Term originalWord : originalTerm) {
-										originalWordDB.createOriginalWord(originalWord);
-								}
 								
-								//result_translate.setText(hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString());
-								//result_translate.setVisibility(1);
+								String translated_word = hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString();
+								Toast toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is: " + translated_word, Toast.LENGTH_LONG);
+								toast.show();
 								
-								
-								List<TranslatedWord> allTranslates = translatedWordDB.getAllTranslates();
-								/*ArrayAdapter<TranslatedWord> adapter = new ArrayAdapter<TranslatedWord>(LinguamApplication.getContext(), R.layout.main_layout, allTranslates);
-								
-								ListView lview = (ListView) findViewById(R.id.listview);
-								lview.setAdapter(adapter);
-								lview.setVisibility(1);*/
 								
 								// findViewById(R.id.progressBar1).setVisibility(View.GONE);
 							} catch (Exception e) {
