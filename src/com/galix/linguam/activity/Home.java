@@ -8,6 +8,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -136,18 +137,25 @@ public class Home extends Activity {
 
 	public void translate(View view) {
 
-		RequestQueue queue = Volley.newRequestQueue(this);
 		EditText translate_caption = (EditText) (findViewById(R.id.search));
 		String word_to_translate = translate_caption.getText().toString();
 		TranslatedWord is_translated = translatedWordDB.getTranslateByWord(word_to_translate);
 		
 		if (is_translated == null) { //If word dosen't exist, search & save
-			queue.add(this.callWR(word_to_translate));
+			this.callWR(word_to_translate);
 		}else{ // If word exist, just show it
 			Toast toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is:" + is_translated.getTerm(), Toast.LENGTH_LONG);			
 			toast.show();
 		}
+		
+		
 
+	}
+	
+	public void to_translate_activity(View view){
+		
+		Intent i = new Intent(this, TranslateActivity.class);
+		startActivity(i); 
 	}
 
 }

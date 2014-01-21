@@ -65,7 +65,14 @@
         
 
     
-
+		<Button
+            android:id="@+id/translate_intent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:onClick="to_translate_activity"
+            android:layout_weight="0"
+            android:text="to_intent" />
         <Button
             android:id="@+id/translate"
             android:layout_width="match_parent"

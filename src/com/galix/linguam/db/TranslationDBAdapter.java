@@ -138,9 +138,11 @@ public class TranslationDBAdapter {
 			
 	    	// make sure to close the cursor
 			cursor.close();
+			Log.v("TranslationDBAdapter - getTranslateByWord:", "Word already exist, returning saved word:" + translationWords.get(0).getTerm() );
 			return translationWords.get(0);
     	}else{
     		cursor.close();
+    		Log.v("TranslationDBAdapter - getTranslateByWord:", "Not Exist");
     		return null;
     	}
 		

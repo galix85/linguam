@@ -1,11 +1,26 @@
 package com.galix.linguam.util;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.galix.linguam.LinguamApplication;
+import com.galix.linguam.R;
+import com.galix.linguam.pojo.OriginalWord;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -113,85 +128,7 @@ public class WordReferenceUtil {
 		hashRequestWRList.keySet();
 		
 		return hashRequestWRList;
-		//return firstTranslationList; 
-		//return firstTranslationList.get(firstTranslationList.size()-1).getTerm().toString();
 
 	}
-
-	/*public void callWR(String word) {
-		
-		try {
-			RequestQueue queue = Volley.newRequestQueue(LinguamApplication.appContext);
-			// Encode word to translate
-			String encoded_word = URLEncoder.encode(word, "UTF-8");
-			// Call URL WR to translate
-			String url = url_base + "/" + languageSource + languageTo + "/"
-					+ encoded_word;
-			
-			
-			JsonObjectRequest myReq = new JsonObjectRequest(Request.Method.GET, 
-					url,
-                    null,
-                    createMyReqSuccessListener(),
-                    createMyReqErrorListener());
-
-			/*jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-					new Response.Listener<JSONObject>() {
-
-						@Override
-						public void onResponse(JSONObject response) {
-							callbackResponse(response); 
-						}
-					}, new Response.ErrorListener() {
-
-						@Override
-						public void onErrorResponse(VolleyError error) {
-							Log.v("onErrorResponse - Volley", error.toString());
-							
-						}
-					});
-
-			queue.add(myReq);
-			
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			Log.v("UnsupportedEncodingException", e.toString());
-			hashmapResponse.put("error", null);
-		}
-	}
-	
-	private Response.ErrorListener createMyReqErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            	Log.v("onErrorResponse - Volley", error.toString());
-            }
-        };
-    }
-
-	 private Response.Listener<JSONObject> createMyReqSuccessListener() {
-	        return new Response.Listener<JSONObject>() {
-	            @Override
-	            public void onResponse(JSONObject response) {
-	                callbackResponse(response);
-	            }
-	        };
-	    }
-
-	public void callbackResponse(JSONObject response){
-		//HashMap<String, List<WordReferenceUtil.Term>> hashRequestWRList = new HashMap<String, List<WordReferenceUtil.Term>>();
-		//Send to parseJSON
-		
-		try {
-			hashmapResponse =  parseJSON(response.toString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			hashmapResponse.put("error", null);
-			Log.v("Exception Parsing JSON", e.toString());
-			
-		}
-		
-		
-	}*/
 
 }
