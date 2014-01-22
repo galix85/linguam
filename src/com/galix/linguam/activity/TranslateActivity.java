@@ -1,13 +1,18 @@
 package com.galix.linguam.activity;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,12 +20,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
 import com.galix.linguam.db.OriginalWordDBAdapter;
 import com.galix.linguam.db.TranslationDBAdapter;
+import com.galix.linguam.pojo.OriginalWord;
+import com.galix.linguam.pojo.TranslatedWord;
 import com.galix.linguam.util.RequestWR;
+import com.galix.linguam.util.WordReferenceUtil;
 import com.galix.linguam.util.WordReferenceUtil.Term;
 
 public class TranslateActivity extends ListActivity {
@@ -29,10 +45,15 @@ public class TranslateActivity extends ListActivity {
 	private ListView listview;
 	ArrayList<Term> translateList;
 
-	private static HashMap<String, List<Term>> hashmapResponse;
 	private static OriginalWordDBAdapter originalWordDB;
 	private static TranslationDBAdapter translatedWordDB;
 
+	private String url_base = "http://api.wordreference.com/0.8/6cd19/json";
+	private String languageSource = "en";
+	private String languageTo = "es";
+	private WordReferenceUtil wrUtil;
+	private static HashMap<String, List<Term>> hashmapResponse;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +72,7 @@ public class TranslateActivity extends ListActivity {
 		Intent intent = getIntent();
 
 		search_button = (ImageButton) findViewById(R.id.translate);
+		final RequestQueue queue = Volley.newRequestQueue(this);
 		search_button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				EditText translate_caption = (EditText) (findViewById(R.id.search));
@@ -58,11 +80,12 @@ public class TranslateActivity extends ListActivity {
 						.toString();
 				if (!word_to_translate.equals("")) {
 					// hashmapResponse = RequestWR.callWR(word_to_translate);
-					showResults(RequestWR.callWR(word_to_translate));
+					//queue.add(RequestWR.callWR(word_to_translate));
+					queue.add(callWR(word_to_translate));
 					translate_caption.setText("");
 				}
 			}
-		});
+		}); 
 	}
 
 	private void saveOriginalWord(Term originalWord) {
@@ -97,6 +120,86 @@ public class TranslateActivity extends ListActivity {
 
 		});
 
+	}
+	
+	private JsonObjectRequest callWR(String word) {
+		
+		JsonObjectRequest jsObjRequest = null;
+
+		try {
+			// Encode word to translate
+			String encoded_word = URLEncoder.encode(word, "UTF-8");
+			// Call URL WR to translate
+			String url = url_base + "/" + languageSource + languageTo + "/"
+					+ encoded_word;
+
+			jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+					new Response.Listener<JSONObject>() {
+
+						@Override
+						public void onResponse(JSONObject response) {
+							
+							Toast toast = null;
+							
+							try {
+								hashmapResponse = wrUtil
+										.parseJSON(response.toString());
+								//Get both response WR lists from hashmap
+								List<Term> firstTranslation = hashmapResponse.get("firstTranslation");
+								List<Term> originalTerm = hashmapResponse.get("originalTerm");
+								
+								int firstTranslationSize = firstTranslation.size();
+								//int originalTermSize = originalTerm.size();
+								
+								OriginalWord originalword = originalWordDB.createOriginalWord(originalTerm.get(originalTerm.size()-1));
+								
+								if (originalword != null){
+									//Insert to DB
+									for (Term translation : firstTranslation) {
+										 if (--firstTranslationSize == 0) {
+											 translatedWordDB.createTranslation(translation,true,originalword.getTerm());
+										 }else{
+											 translatedWordDB.createTranslation(translation,false,originalword.getTerm());
+										 }
+									}
+								
+								String translated_word = hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString();
+								    toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is: " + translated_word, Toast.LENGTH_LONG);
+								}else{
+									toast = Toast.makeText(LinguamApplication.getContext(), "This word is already in your translated collection words", Toast.LENGTH_LONG);
+								}
+								
+								toast.show();
+								
+								
+								// findViewById(R.id.progressBar1).setVisibility(View.GONE);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								Log.v("Exception", e.toString());
+								TextView result_translate = (TextView) findViewById(R.id.result_translate);
+								result_translate.setText("No results");
+								result_translate.setVisibility(1);
+							}
+
+						}
+					}, new Response.ErrorListener() {
+
+						@Override
+						public void onErrorResponse(VolleyError error) {
+							Log.v("onErrorResponse - Volley", error.toString());
+							TextView result_translate = (TextView) findViewById(R.id.result_translate);
+							result_translate
+									.setText("There is any network problem - Please check if you have interent access");
+							result_translate.setVisibility(1);
+						}
+					});
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return jsObjRequest;
 	}
 
 	private class StableArrayAdapter extends ArrayAdapter<Term> {

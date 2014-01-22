@@ -24,6 +24,7 @@ import com.galix.linguam.pojo.OriginalWord;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 public class WordReferenceUtil {
@@ -90,45 +91,49 @@ public class WordReferenceUtil {
 	public HashMap<String, List<Term>> hashmapResponse;
 
 	public HashMap<String, List<Term>> parseJSON(
-			String jsonLine) throws Exception {
+			String jsonLine)  {
 
 		HashMap<String, List<WordReferenceUtil.Term>> hashRequestWRList = new HashMap<String, List<WordReferenceUtil.Term>>();
-
-		// Parsing JSON
-		JsonParser jp = new JsonParser();
-		JsonElement je = jp.parse(jsonLine);
-		JsonElement je2 = je.getAsJsonObject().get("term0");
-		JsonElement je3 = je2.getAsJsonObject().get("PrincipalTranslations");
-
-		// List of objects to persist
-		List<WordReferenceUtil.Term> firstTranslationList = new ArrayList<WordReferenceUtil.Term>();
-		List<WordReferenceUtil.Term> originalTermList = new ArrayList<WordReferenceUtil.Term>();
-
-		Type mapType = new TypeToken<Map<String, Item>>() {
-		}.getType();
-		Map<String, Item> principalTranslation = new Gson().fromJson(je3,
-				mapType);
-
-		List<Item> list = new ArrayList<Item>(principalTranslation.values());
-
-		for (Item item : list) {
-			firstTranslationList.add(item.FirstTranslation);
-			originalTermList.add(item.OriginalTerm);
-			
-		}
-
-		// TODO hash-map with two lists
-		if (firstTranslationList.size() > 0) {
-			hashRequestWRList.put("firstTranslation", firstTranslationList);
-		}
-		if (originalTermList.size() > 0) {
-			hashRequestWRList.put("originalTerm", originalTermList);
-		}
-
-		hashRequestWRList.keySet();
 		
-		return hashRequestWRList;
+		try {
+			// Parsing JSON
+			JsonParser jp = new JsonParser();
+			JsonElement je = jp.parse(jsonLine);
+			JsonElement je2 = je.getAsJsonObject().get("term0");
+			JsonElement je3 = je2.getAsJsonObject().get("PrincipalTranslations");
 
+			// List of objects to persist
+			List<WordReferenceUtil.Term> firstTranslationList = new ArrayList<WordReferenceUtil.Term>();
+			List<WordReferenceUtil.Term> originalTermList = new ArrayList<WordReferenceUtil.Term>();
+
+			Type mapType = new TypeToken<Map<String, Item>>() {
+			}.getType();
+			Map<String, Item> principalTranslation = new Gson().fromJson(je3,
+					mapType);
+
+			List<Item> list = new ArrayList<Item>(principalTranslation.values());
+
+			for (Item item : list) {
+				firstTranslationList.add(item.FirstTranslation);
+				originalTermList.add(item.OriginalTerm);
+				
+			}
+
+			// TODO hash-map with two lists
+			if (firstTranslationList.size() > 0) {
+				hashRequestWRList.put("firstTranslation", firstTranslationList);
+			}
+			if (originalTermList.size() > 0) {
+				hashRequestWRList.put("originalTerm", originalTermList);
+			}
+
+			hashRequestWRList.keySet();
+
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return hashRequestWRList;
 	}
 
 }

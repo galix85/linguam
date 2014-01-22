@@ -40,7 +40,7 @@ public class RequestWR {
 	
 							@Override
 							public void onResponse(JSONObject response) {
-								
+								Log.v("callWR-onResponse-response: ", response.toString());
 								try {
 									hashmapResponse = wrUtil
 											.parseJSON(response.toString());

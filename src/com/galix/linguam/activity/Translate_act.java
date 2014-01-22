@@ -2,6 +2,7 @@ package com.galix.linguam.activity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +34,7 @@ import com.galix.linguam.pojo.TranslatedWord;
 import com.galix.linguam.util.WordReferenceUtil;
 import com.galix.linguam.util.WordReferenceUtil.Term;
 
-public class Home extends Activity {
+public class Translate_act extends Activity {
 
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 	
@@ -43,17 +46,44 @@ public class Home extends Activity {
 	private String languageTo = "es";
 	private WordReferenceUtil wrUtil;
 	private HashMap<String, List<Term>> hashmapResponse;
-
+	
+	private ImageButton search_button;
+	private ListView listview;
+	ArrayList<Term> translateList;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// Get the message from the intent
+		Intent intent = getIntent();
+		
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.translate_main_layout);
+		
 		wrUtil = new WordReferenceUtil();
 		originalWordDB = new OriginalWordDBAdapter(LinguamApplication.getContext());
 		translatedWordDB = new TranslationDBAdapter(LinguamApplication.getContext());
 		LinguamApplication.init();
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_layout);
-	}
 
+		// List & listview
+		translateList = new ArrayList<Term>();
+		listview = (ListView) findViewById(android.R.id.list);
+
+		search_button = (ImageButton) findViewById(R.id.translate);
+		final RequestQueue queue = Volley.newRequestQueue(this);
+		search_button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				EditText translate_caption = (EditText) (findViewById(R.id.search));
+				String word_to_translate = translate_caption.getText()
+						.toString();
+				if (!word_to_translate.equals("")) {
+					translate(word_to_translate);
+				}
+			}
+		}); 
+		
+	
+	}
+	
 	public JsonObjectRequest callWR(String word) {
 		
 		JsonObjectRequest jsObjRequest = null;
@@ -135,27 +165,19 @@ public class Home extends Activity {
 		return jsObjRequest;
 	}
 
-	public void translate(View view) {
+	public void translate(String word) {
 
 		RequestQueue queue = Volley.newRequestQueue(this);
-		EditText translate_caption = (EditText) (findViewById(R.id.search));
-		String word_to_translate = translate_caption.getText().toString();
-		TranslatedWord is_translated = translatedWordDB.getTranslateByWord(word_to_translate);
+		TranslatedWord is_translated = translatedWordDB.getTranslateByWord(word);
 		
 		if (is_translated == null) { //If word dosen't exist, search & save
-			queue.add(this.callWR(word_to_translate));
+			queue.add(this.callWR(word));
 		}else{ // If word exist, just show it
 			Toast toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is:" + is_translated.getTerm(), Toast.LENGTH_LONG);			
 			toast.show();
 		}
 		
 
-	}
-	
-	public void to_translate_activity(View view){
-		
-		Intent i = new Intent(this, Translate_act.class);
-		startActivity(i); 
 	}
 
 }
