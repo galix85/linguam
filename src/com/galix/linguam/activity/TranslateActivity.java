@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -34,8 +33,6 @@ import com.galix.linguam.R;
 import com.galix.linguam.db.OriginalWordDBAdapter;
 import com.galix.linguam.db.TranslationDBAdapter;
 import com.galix.linguam.pojo.OriginalWord;
-import com.galix.linguam.pojo.TranslatedWord;
-import com.galix.linguam.util.RequestWR;
 import com.galix.linguam.util.WordReferenceUtil;
 import com.galix.linguam.util.WordReferenceUtil.Term;
 

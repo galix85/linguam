@@ -5,17 +5,22 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +39,7 @@ import com.galix.linguam.pojo.TranslatedWord;
 import com.galix.linguam.util.WordReferenceUtil;
 import com.galix.linguam.util.WordReferenceUtil.Term;
 
-public class Translate_act extends Activity {
+public class Translate_act extends ListActivity {
 
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 	
@@ -69,7 +74,6 @@ public class Translate_act extends Activity {
 		listview = (ListView) findViewById(android.R.id.list);
 
 		search_button = (ImageButton) findViewById(R.id.translate);
-		final RequestQueue queue = Volley.newRequestQueue(this);
 		search_button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				EditText translate_caption = (EditText) (findViewById(R.id.search));
@@ -106,7 +110,9 @@ public class Translate_act extends Activity {
 							try {
 								hashmapResponse = wrUtil
 										.parseJSON(response.toString());
-								//TextView result_translate = (TextView) findViewById(R.id.result_translate);
+
+								showResults(hashmapResponse.get("firstTranslation"));
+								/*
 								//Get both response WR lists from hashmap
 								List<Term> firstTranslation = hashmapResponse.get("firstTranslation");
 								List<Term> originalTerm = hashmapResponse.get("originalTerm");
@@ -126,16 +132,11 @@ public class Translate_act extends Activity {
 										 }
 									}
 								
-								String translated_word = hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString();
-								    toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is: " + translated_word, Toast.LENGTH_LONG);
-								}else{
-									toast = Toast.makeText(LinguamApplication.getContext(), "This word is already in your translated collection words", Toast.LENGTH_LONG);
-								}
-								
-								toast.show();
-								
-								
-								// findViewById(R.id.progressBar1).setVisibility(View.GONE);
+									String translated_word = hashmapResponse.get("firstTranslation").get(firstTranslation.size()-1).getTerm().toString();
+									toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is: " + translated_word, Toast.LENGTH_LONG);
+									toast.show();
+								}*/
+
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								Log.v("Exception", e.toString());
@@ -172,6 +173,7 @@ public class Translate_act extends Activity {
 		
 		if (is_translated == null) { //If word dosen't exist, search & save
 			queue.add(this.callWR(word));
+			//showResults(hashmapResponse.get("firstTranslation"));
 		}else{ // If word exist, just show it
 			Toast toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is:" + is_translated.getTerm(), Toast.LENGTH_LONG);			
 			toast.show();
@@ -179,5 +181,73 @@ public class Translate_act extends Activity {
 		
 
 	}
+	
+	private void showResults(List<Term> translateList) {
 
+		List<String> translationTerm = new ArrayList<String>();
+		
+		for (Term term : translateList) {
+			//translationTerm.add(createTerms("term", term.getTerm()));
+		    translationTerm.add(term.getTerm());
+		}
+		
+		// This is a simple adapter that accepts as parameter
+		// Context
+		// Data list
+		// The row layout that is used during the row creation
+		// The keys used to retrieve the data
+		// The View id used to show the data. The key number and the view id must match
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.translate_row,R.id.term, translationTerm);
+		
+		listview.setAdapter(adapter);
+		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		
+		/*listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, final View view,
+					int position, long id) {
+
+				final Term item = (Term) parent.getItemAtPosition(position);
+				saveOriginalWord(hashmapResponse.get("originalTerm").get(
+						hashmapResponse.get("originalTerm").size() - 1));
+				saveTranslateWord(item, hashmapResponse.get("originalTerm")
+						.get(hashmapResponse.get("originalTerm").size() - 1));
+
+			}
+
+		});*/
+
+	}
+	
+	private HashMap<String, String> createTerms(String key, String name) {
+		    HashMap<String, String> term = new HashMap<String, String>();
+		    term.put(key, name);
+		    return term;
+		}
+
+	
+	private class StableArrayAdapter extends ArrayAdapter<Term> {
+
+		List<Term> mIdMap = new ArrayList<Term>();
+
+		public StableArrayAdapter(Context context, int textViewResourceId,
+				List<Term> translateList) {
+			super(LinguamApplication.getContext(), textViewResourceId,
+					translateList);
+			for (int i = 0; i < translateList.size(); ++i) {
+				mIdMap.add(translateList.get(i));
+			}
+		}
+
+	}
+
+	private void saveOriginalWord(Term originalWord) {
+		originalWordDB.createOriginalWord(originalWord);
+	}
+
+	private void saveTranslateWord(Term translateWord, Term originalWord) {
+		translatedWordDB.createTranslation(translateWord, true,
+				originalWord.getTerm());
+	}
 }
