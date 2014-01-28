@@ -14,22 +14,22 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class PhonebookAdapter extends BaseAdapter implements OnClickListener {
+public class TermAdapter extends BaseAdapter implements OnClickListener {
     private Context context;
 
-    private List<Term> listPhonebook;
+    private List<Term> listTerm;
 
-    public PhonebookAdapter(Context context, List<Term> listPhonebook) {
+    public TermAdapter(Context context, List<Term> listPhonebook) {
         this.context = context;
-        this.listPhonebook = listPhonebook;
+        this.listTerm = listPhonebook;
     }
 
     public int getCount() {
-        return listPhonebook.size();
+        return listTerm.size();
     }
 
     public Object getItem(int position) {
-        return listPhonebook.get(position);
+        return listTerm.get(position);
     }
 
     public long getItemId(int position) {
@@ -37,18 +37,19 @@ public class PhonebookAdapter extends BaseAdapter implements OnClickListener {
     }
 
     public View getView(int position, View convertView, ViewGroup viewGroup) {
-    	Term entry = listPhonebook.get(position);
+    	Term entry = listTerm.get(position);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.translate_row, null);
         }
-        /*TextView tvContact = (TextView) convertView.findViewById(R.id.tvContact);
-        tvContact.setText(entry.getTerm());
+        TextView tvTerm = (TextView) convertView.findViewById(R.id.tvTerm);
+        tvTerm.setText(entry.getTerm());
 
-        TextView tvPhone = (TextView) convertView.findViewById(R.id.tvMobile);
-        tvPhone.setText(entry.getPOS());
-
+        //TextView tvType = (TextView) convertView.findViewById(R.id.tvType);
+        //tvType.setText(entry.getPOS());
+        
+        /*
         // Set the onClick Listener on this button
         Button btnRemove = (Button) convertView.findViewById(R.id.btnRemove);
         btnRemove.setFocusableInTouchMode(false);
@@ -70,15 +71,11 @@ public class PhonebookAdapter extends BaseAdapter implements OnClickListener {
     @Override
     public void onClick(View view) {
         Term entry = (Term) view.getTag();
-        listPhonebook.remove(entry);
+        listTerm.remove(entry);
         // listPhonebook.remove(view.getId());
         notifyDataSetChanged();
 
     }
 
-    private void showDialog(Term entry) {
-        // Create and show your dialog
-        // Depending on the Dialogs button clicks delete it or do nothing
-    }
 
 }

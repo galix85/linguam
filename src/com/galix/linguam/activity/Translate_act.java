@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -111,7 +112,9 @@ public class Translate_act extends ListActivity {
 								hashmapResponse = wrUtil
 										.parseJSON(response.toString());
 
-								showResults(hashmapResponse.get("firstTranslation"));
+								showResults(hashmapResponse.get("firstTranslation"),
+										hashmapResponse.get("originalTerm").get(hashmapResponse.get("originalTerm").size()-1));
+								//Term a = hashmapResponse.get("originalTerm").get(hashmapResponse.get("originalTerm").size()-1);
 								/*
 								//Get both response WR lists from hashmap
 								List<Term> firstTranslation = hashmapResponse.get("firstTranslation");
@@ -140,9 +143,6 @@ public class Translate_act extends ListActivity {
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								Log.v("Exception", e.toString());
-								TextView result_translate = (TextView) findViewById(R.id.result_translate);
-								result_translate.setText("No results");
-								result_translate.setVisibility(1);
 							}
 
 						}
@@ -151,10 +151,6 @@ public class Translate_act extends ListActivity {
 						@Override
 						public void onErrorResponse(VolleyError error) {
 							Log.v("onErrorResponse - Volley", error.toString());
-							TextView result_translate = (TextView) findViewById(R.id.result_translate);
-							result_translate
-									.setText("There is any network problem - Please check if you have interent access");
-							result_translate.setVisibility(1);
 						}
 					});
 
@@ -182,9 +178,9 @@ public class Translate_act extends ListActivity {
 
 	}
 	
-	private void showResults(List<Term> translateList) {
+	private void showResults(final List<Term> translateList, final Term originalWord) {
 
-		List<String> translationTerm = new ArrayList<String>();
+		List<String> translationTerm = new ArrayList<String>(); 	
 		
 		for (Term term : translateList) {
 			//translationTerm.add(createTerms("term", term.getTerm()));
@@ -197,10 +193,23 @@ public class Translate_act extends ListActivity {
 		// The row layout that is used during the row creation
 		// The keys used to retrieve the data
 		// The View id used to show the data. The key number and the view id must match
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.translate_row,R.id.term, translationTerm);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.translate_row,R.id.tvTerm, translationTerm);
 		
 		listview.setAdapter(adapter);
+		this.getListView().setSelector(R.drawable.translate_row_selector);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		
+		listview.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
+			{
+			      String selectedFromList = (translateList.get(position).getTerm());
+			      Toast toast = Toast.makeText(LinguamApplication.getContext(), "The item selected is: " + selectedFromList, Toast.LENGTH_SHORT);	
+			      toast.show(); 
+			      saveOriginalWord(originalWord);
+			      saveTranslateWord(translateList.get(position),originalWord);
+			      Toast toast2 = Toast.makeText(LinguamApplication.getContext(), "Orginal: " + originalWord.getTerm() + " AND Trans: " + translateList.get(position) + " saved", Toast.LENGTH_SHORT);	
+			      toast2.show();
+			}});
 		
 		/*listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

@@ -21,24 +21,25 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_action_search=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
+        public static final int gradient_bg=0x7f020000;
+        public static final int gradient_bg_hover=0x7f020001;
+        public static final int ic_action_search=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int translate_row_selector=0x7f020004;
     }
     public static final class id {
         public static final int LinearLayout01=0x7f080009;
-        public static final int LinearLayout02=0x7f08000b;
         public static final int LinearLayout1=0x7f080000;
-        public static final int TextView01=0x7f080008;
-        public static final int action_settings=0x7f08000d;
+        public static final int action_settings=0x7f08000b;
         public static final int listview=0x7f080003;
         public static final int play=0x7f080001;
         public static final int result_translate=0x7f080002;
         public static final int search=0x7f080004;
-        public static final int term=0x7f08000a;
-        public static final int term_type=0x7f08000c;
         public static final int translate=0x7f080006;
         public static final int translate_intent=0x7f080005;
         public static final int translate_main_layout=0x7f080007;
+        public static final int tvTerm=0x7f08000a;
+        public static final int tvTitleTerm=0x7f080008;
     }
     public static final class layout {
         public static final int main_layout=0x7f030000;
