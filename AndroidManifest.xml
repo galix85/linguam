@@ -24,8 +24,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.galix.linguam.activity.Translate_act"
-            android:label="@string/title_activity_display_message"
+            android:name="com.galix.linguam.activity.Translate_Activity"
+            android:label="@string/translate_activity_title"
             android:parentActivityName="com.galix.linguam.activity.Home" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
