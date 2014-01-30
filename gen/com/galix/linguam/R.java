@@ -24,18 +24,20 @@ public final class R {
         public static final int gradient_bg=0x7f020000;
         public static final int gradient_bg_hover=0x7f020001;
         public static final int ic_action_search=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int translate_row_selector=0x7f020004;
+        public static final int ic_game_activity=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int ic_translate_activity=0x7f020005;
+        public static final int translate_row_selector=0x7f020006;
     }
     public static final class id {
         public static final int LinearLayout01=0x7f080007;
         public static final int LinearLayout02=0x7f080009;
         public static final int LinearLayout1=0x7f080000;
         public static final int action_settings=0x7f08000b;
-        public static final int play=0x7f080001;
+        public static final int btn_play_activity=0x7f080001;
+        public static final int btn_translate_activity=0x7f080002;
         public static final int search=0x7f080004;
         public static final int translate=0x7f080005;
-        public static final int translate_intent=0x7f080002;
         public static final int translate_main_layout=0x7f080003;
         public static final int tvTerm=0x7f080008;
         public static final int tvTitleTerm=0x7f080006;
@@ -55,9 +57,13 @@ public final class R {
         /**  General Strings  
          */
         public static final int app_name=0x7f050000;
+        public static final int ictext_play=0x7f050008;
+        /**  Main Activity icon text 
+         */
+        public static final int ictext_search=0x7f050007;
         /**  Play Button Strings  
          */
-        public static final int playgame_button=0x7f050007;
+        public static final int playgame_button=0x7f050009;
         /**  Translate Button Strings  
          */
         public static final int tanslate_button=0x7f050003;

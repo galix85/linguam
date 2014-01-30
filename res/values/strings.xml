@@ -12,7 +12,9 @@
     <string name="translate_no_result">No result found</string>
     <string name="translate_possible_translation">Possible Translations:</string>
     
-    
+    <!-- Main Activity icon text -->
+    <string name="ictext_search">Find your word!</string>
+    <string name="ictext_play">Let\'s play!</string>
     
     <!-- Play Button Strings  -->
     <string name="playgame_button">Play</string>

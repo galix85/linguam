@@ -79,9 +79,10 @@ public class Translate_Activity extends ListActivity {
 		search_button = (ImageButton) findViewById(R.id.translate);
 		search_button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
+				
 				EditText translate_caption = (EditText) (findViewById(R.id.search));
-				String word_to_translate = translate_caption.getText()
-						.toString();
+				String word_to_translate = translate_caption.getText().toString();
+				
 				if (!word_to_translate.equals("")) {
 					translate(word_to_translate);
 				}
@@ -97,6 +98,12 @@ public class Translate_Activity extends ListActivity {
 		TranslatedWord is_translated = translatedWordDB.getTranslateByWord(word);
 		
 		if (is_translated == null) { //If word dosen't exist, search & save
+			
+			//Reset layout
+			TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
+			tvTitleTerm.setText(null);
+			listview.setAdapter(null);
+			
 			queue.add(this.callWR(word));
 		}else{ // If word exist, just show it
 			Toast toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is:" + is_translated.getTerm(), Toast.LENGTH_LONG);			
@@ -110,7 +117,7 @@ public class Translate_Activity extends ListActivity {
 
 		//Make visible title of search "Possible Translations:"
 		TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
-		tvTitleTerm.setText(R.string.translate_possible_translation);
+		tvTitleTerm.setText(getString(R.string.translate_possible_translation));
 		tvTitleTerm.setVisibility(1);
 		
 		List<String> translationTerm = new ArrayList<String>(); 	
@@ -151,10 +158,7 @@ public class Translate_Activity extends ListActivity {
 				
 				TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
 				tvTitleTerm.setVisibility(-1);
-				
-				//TextView tvNoTranslation = (TextView)(findViewById(R.id.tvNoTranslation));
-				//tvNoTranslation.setVisibility(-1);
-		
+
 				listview.setAdapter(null);
 			}});
 		
@@ -187,9 +191,8 @@ public JsonObjectRequest callWR(String word) {
 						@Override
 						public void onResponse(JSONObject response) {
 							
-							Toast toast = null;
-							
 							try {
+
 								hashmapResponse = wrUtil
 										.parseJSON(response.toString());
 
@@ -199,7 +202,7 @@ public JsonObjectRequest callWR(String word) {
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
-								tvTitleTerm.setText(tvTitleTerm.getText() +" "+ getString(R.string.translate_no_result));
+								tvTitleTerm.setText(getString(R.string.translate_possible_translation) +" "+ getString(R.string.translate_no_result));
 								tvTitleTerm.setVisibility(1);
 								Log.v("Exception (no results)", e.toString());
 							}
