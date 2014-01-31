@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="10sp"
+    android:paddingRight="10sp"
+    android:textAlignment="center" >
+
+    <TextView
+            android:id="@+id/tvTerm"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/activatedBackgroundIndicator"
+            android:textAlignment="center"
+             android:textStyle="bold"
+            android:textSize="16sp"
+            android:typeface="sans" >
+      </TextView>
+      <LinearLayout android:id="@+id/LinearLayout02"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent">
+                <TextView android:id="@+id/tvType" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Type" android:textSize="13sp"></TextView>
+        </LinearLayout> 
+</LinearLayout>
