@@ -3,7 +3,7 @@ package com.galix.linguam.adapter;
 import java.util.List;
 
 import com.galix.linguam.R;
-import com.galix.linguam.util.WordReferenceUtil.Term;
+import com.galix.linguam.pojo.Term;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,6 +1,7 @@
 package com.galix.linguam.activity;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,20 +10,17 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,29 +32,34 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
+import com.galix.linguam.RESTinterface.WordReferenceClient;
 import com.galix.linguam.adapter.TermAdapter;
-import com.galix.linguam.db.OriginalWordDBAdapter;
-import com.galix.linguam.db.TranslationDBAdapter;
+import com.galix.linguam.pojo.Item;
 import com.galix.linguam.pojo.OriginalWord;
+import com.galix.linguam.pojo.Term;
 import com.galix.linguam.pojo.TranslatedWord;
+import com.galix.linguam.service.ServiceClient;
 import com.galix.linguam.util.WordReferenceUtil;
-import com.galix.linguam.util.WordReferenceUtil.Term;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 public class Translate_Activity extends ListActivity {
+	
+	private static final String TAG = "Linguam: Translate Activity";
 
-	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+	//private String url_base = "http://api.wordreference.com/0.8/6cd19/json";
+	//private String languageSource = "en";
+	//private String languageTo = "es";
 	
-	private static OriginalWordDBAdapter originalWordDB;
-	private static TranslationDBAdapter translatedWordDB;
+	private WordReferenceClient wordReferenceClient;
+			
+	//private WordReferenceUtil wrUtil;
+	//private HashMap<String, List<Term>> hashmapResponse;
 	
-	private String url_base = "http://api.wordreference.com/0.8/6cd19/json";
-	private String languageSource = "en";
-	private String languageTo = "es";
-	private WordReferenceUtil wrUtil;
-	private HashMap<String, List<Term>> hashmapResponse;
-	
-	private ImageButton search_button;
-	private ListView listview;
+	private ImageButton ib_searchButton;
+	private ListView lv;
 	ArrayList<Term> translateList;
 	
 	@Override
@@ -67,25 +70,34 @@ public class Translate_Activity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.translate_main_layout);
 		
-		wrUtil = new WordReferenceUtil();
-		originalWordDB = new OriginalWordDBAdapter(LinguamApplication.getContext());
-		translatedWordDB = new TranslationDBAdapter(LinguamApplication.getContext());
-		LinguamApplication.init();
-
+		// Client object with actions interface of beach.
+		wordReferenceClient = ServiceClient.getInstance().getClient(this,
+						WordReferenceClient.class);
+		
+		//wrUtil = new WordReferenceUtil();
 		// List & listview
 		translateList = new ArrayList<Term>();
-		listview = (ListView) findViewById(android.R.id.list);
+		lv = (ListView) findViewById(android.R.id.list);
 
-		search_button = (ImageButton) findViewById(R.id.translate);
-		search_button.setOnClickListener(new View.OnClickListener() {
+		ib_searchButton = (ImageButton) findViewById(R.id.translate);
+		ib_searchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				
-				EditText translate_caption = (EditText) (findViewById(R.id.search));
-				String word_to_translate = translate_caption.getText().toString();
+				EditText etTranslateCaption = (EditText) (findViewById(R.id.search));
+				String word_to_translate;
+				try {
+					
+					word_to_translate = URLEncoder.encode(etTranslateCaption.getText().toString(), "UTF-8");
+					if (!word_to_translate.equals("")) {
+						//translate(word_to_translate);
+						getTranslation(word_to_translate);
+					}
 				
-				if (!word_to_translate.equals("")) {
-					translate(word_to_translate);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					Log.v(TAG, e.getCause().toString());
 				}
+				
 			}
 		}); 
 		
@@ -95,16 +107,16 @@ public class Translate_Activity extends ListActivity {
 	public void translate(String word) {
 
 		RequestQueue queue = Volley.newRequestQueue(this);
-		TranslatedWord is_translated = translatedWordDB.getTranslateByWord(word);
+		TranslatedWord is_translated = LinguamApplication.translatedWordDB.getTranslateByWord(word);
 		
 		if (is_translated == null) { //If word dosen't exist, search & save
 			
 			//Reset layout
 			TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
 			tvTitleTerm.setText(null);
-			listview.setAdapter(null);
+			lv.setAdapter(null);
 			
-			queue.add(this.callWR(word));
+			//queue.add(this.callWR(word));
 		}else{ // If word exist, just show it
 			Toast toast = Toast.makeText(LinguamApplication.getContext(), "Your translated word is:" + is_translated.getTerm(), Toast.LENGTH_LONG);			
 			toast.show();
@@ -133,13 +145,13 @@ public class Translate_Activity extends ListActivity {
 		// The View id used to show the data. The key number and the view id must match
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.translate_row,R.id.tvTerm, translationTerm);
 		TermAdapter adapter = new TermAdapter(LinguamApplication.getContext(), translateList);
-		listview.setAdapter(adapter);
+		lv.setAdapter(adapter);
 		
 		//
 		this.getListView().setSelector(R.drawable.translate_row_selector);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		
-		listview.setOnItemClickListener(new OnItemClickListener() {
+		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) 
 			{
 				Toast toast;
@@ -159,22 +171,82 @@ public class Translate_Activity extends ListActivity {
 				TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
 				tvTitleTerm.setVisibility(-1);
 
-				listview.setAdapter(null);
+				lv.setAdapter(null);
 			}});
 		
 	}
 
 	private OriginalWord saveOriginalWord(Term originalWord) {
-		OriginalWord newOriginalWord = originalWordDB.createOriginalWord(originalWord);
+		OriginalWord newOriginalWord = LinguamApplication.originalWordDB.createOriginalWord(originalWord);
 		return newOriginalWord;
 	}
 
 	private void saveTranslateWord(Term translateWord, Term originalWord) {
-		translatedWordDB.createTranslation(translateWord, true,
+		LinguamApplication.translatedWordDB.createTranslation(translateWord, true,
 				originalWord.getTerm());
 	}
 	
-public JsonObjectRequest callWR(String word) {
+	/**
+	 * Get all information about beach
+	 */
+	private void getTranslation(String word) {
+
+		
+		wordReferenceClient.translate(word,new Callback<JsonObject>() {
+
+			@Override
+			public void failure(RetrofitError err) {
+				
+				Log.e(TAG, err.toString(), err);
+				// TODO Auto-generated catch block
+				TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
+				tvTitleTerm.setText(getString(R.string.translate_possible_translation) +" "+ getString(R.string.translate_no_result));
+				tvTitleTerm.setVisibility(1);
+				
+			}
+
+			@Override
+			public void success(JsonObject response, retrofit.client.Response arg1) {
+	 
+				// List of objects to persist
+				List<Term> firstTranslationList = new ArrayList<Term>();
+				List<Term> originalTermList = new ArrayList<Term>();
+				HashMap<String, List<Term>> hashRequestWRList = new HashMap<String, List<Term>>();
+				
+				// Parsing JSON
+				JsonElement je2 = response.getAsJsonObject().get("term0");
+				JsonElement je3 = je2.getAsJsonObject().get("PrincipalTranslations");
+
+				Type mapType = new TypeToken<Map<String, Item>>() {}.getType();
+				
+				Map<String, Item> principalTranslation = new Gson().fromJson(je3,
+						mapType);
+
+				List<Item> list = new ArrayList<Item>(principalTranslation.values());
+
+				for (Item item : list) {
+					firstTranslationList.add(item.getFirstTranslation());
+					originalTermList.add(item.getOriginalTerm());
+				}
+
+				// TODO hash-map with two lists
+				if (firstTranslationList.size() > 0) {
+					hashRequestWRList.put("firstTranslation", firstTranslationList);
+				}
+				if (originalTermList.size() > 0) {
+					hashRequestWRList.put("originalTerm", originalTermList);
+				}
+
+				showResults(hashRequestWRList.get("firstTranslation"),
+						hashRequestWRList.get("originalTerm").get(hashRequestWRList.get("originalTerm").size()-1));
+			}
+		
+		});
+
+	}
+	
+	
+/*public JsonObjectRequest callWR(String word) {
 		
 		JsonObjectRequest jsObjRequest = null;
 
@@ -222,5 +294,5 @@ public JsonObjectRequest callWR(String word) {
 		}
 
 		return jsObjRequest;
-	}
+	}*/
 }
