@@ -2,17 +2,15 @@ package com.galix.linguam.adapter;
 
 import java.util.List;
 
-import com.galix.linguam.R;
-import com.galix.linguam.util.WordReferenceUtil.Term;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
+
+import com.galix.linguam.R;
+import com.galix.linguam.pojo.Term;
 
 public class TermAdapter extends BaseAdapter {
     private Context context;
@@ -37,6 +35,7 @@ public class TermAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup viewGroup) {
+    	
     	Term entry = listTerm.get(position);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
@@ -52,8 +51,7 @@ public class TermAdapter extends BaseAdapter {
         }else{
         	tvType.setText(entry.getPOS());
         }
-        
-        
+
         return convertView;
     }
 

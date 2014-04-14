@@ -6,7 +6,8 @@ import java.util.List;
 import com.galix.linguam.db.OriginalWordDBAdapter;
 import com.galix.linguam.db.TranslationDBAdapter;
 import com.galix.linguam.pojo.OriginalWord;
-import com.galix.linguam.util.WordReferenceUtil.Term;
+import com.galix.linguam.pojo.Term;
+
 
 public class TranslateMethod {
 

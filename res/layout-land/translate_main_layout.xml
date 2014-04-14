@@ -8,21 +8,24 @@
     tools:context=".Translate_Activity" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/search"
-            android:layout_width="250dp"
+            android:layout_width="292dp"
             android:layout_height="48dp"
+            android:layout_weight="1.00"
             android:hint="@string/translate_word_hint"
             android:inputType="text" >
+
+            <requestFocus />
         </EditText>
 
         <ImageButton
             android:id="@+id/translate"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:background="@android:color/black"
             android:contentDescription="@string/translate_word_hint"
@@ -30,7 +33,7 @@
             android:src="@drawable/ic_action_search" />
     </LinearLayout>
 
-    <LinearLayout
+     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
         android:layout_gravity="bottom"
@@ -58,5 +61,5 @@
             android:divider="#b5b5b5"
             android:dividerHeight="1dp" />
     </LinearLayout>
-
+    
 </LinearLayout>

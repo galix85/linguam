@@ -20,24 +20,29 @@
  ***************************************************************************/
 package com.galix.linguam;
 
+
+import com.galix.linguam.db.OriginalWordDBAdapter;
+import com.galix.linguam.db.TranslationDBAdapter;
+
 import android.app.Application;
 import android.content.Context;
 
 
 public class LinguamApplication extends Application {
-
+	
 	public static Context appContext;
 	private static LinguamApplication instance = null;
+	public static OriginalWordDBAdapter originalWordDB = null;
+	public static TranslationDBAdapter translatedWordDB = null;
 
-	public static void init()
-    {
-    }
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		instance = this;
 		appContext = getApplicationContext();
+		originalWordDB = new OriginalWordDBAdapter(appContext);
+		translatedWordDB = new TranslationDBAdapter(appContext);
 	}
 	
 	

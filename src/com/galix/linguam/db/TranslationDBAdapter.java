@@ -3,8 +3,8 @@ package com.galix.linguam.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.galix.linguam.pojo.Term;
 import com.galix.linguam.pojo.TranslatedWord;
-import com.galix.linguam.util.WordReferenceUtil.Term;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.galix.linguam.pojo.OriginalWord;
-import com.galix.linguam.util.WordReferenceUtil.Term;
+import com.galix.linguam.pojo.Term;
 
 public class OriginalWordDBAdapter {
 

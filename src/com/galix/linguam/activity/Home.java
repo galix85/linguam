@@ -5,16 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
 
 public class Home extends Activity {
 
-	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		LinguamApplication.init();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
 	}

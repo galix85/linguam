@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    tools:context=".Home" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_play_activity"
+                android:layout_width="158dp"
+                android:layout_height="148dp"
+                android:layout_weight="0.64"
+                android:background="@android:color/transparent"
+                android:drawablePadding="20dp"
+                android:drawableTop="@drawable/ic_game_activity"
+                android:onClick="game_activity"
+                android:paddingTop="32sp"
+                android:text="@string/ictext_play"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/btn_translate_activity"
+                android:layout_width="158dp"
+                android:layout_height="148dp"
+                android:layout_weight="0.32"
+                android:background="@android:color/transparent"
+                android:drawablePadding="20dp"
+                android:drawableTop="@drawable/ic_translate_activity"
+                android:onClick="to_translate_activity"
+                android:paddingTop="32sp"
+                android:text="@string/ictext_search"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
