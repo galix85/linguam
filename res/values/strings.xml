@@ -11,6 +11,8 @@
     <string name="translate_word_hint">Type a word</string>
     <string name="translate_no_result">No result found</string>
     <string name="translate_possible_translation">Possible Translations:</string>
+    <string name="already_traslated">You already looked for this word(%s), let\'s play? :)</string>
+    <string name="translation_saved">Translation saved: %1$s(%2$s)</string>
     
     <!-- Main Activity icon text -->
     <string name="ictext_search">Find your word!</string>

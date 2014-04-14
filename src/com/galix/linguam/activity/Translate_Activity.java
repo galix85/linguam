@@ -31,6 +31,7 @@ import com.galix.linguam.adapter.TermAdapter;
 import com.galix.linguam.pojo.Item;
 import com.galix.linguam.pojo.OriginalWord;
 import com.galix.linguam.pojo.Term;
+import com.galix.linguam.pojo.TranslatedWord;
 import com.galix.linguam.service.ServiceClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -42,6 +43,9 @@ public class Translate_Activity extends ListActivity {
 	private static final String TAG = "Linguam: Translate Activity";
 	private WordReferenceClient wordReferenceClient;
 			
+	private EditText etTranslateCaption;
+	private TextView tvTitleTerm;
+	
 	private ImageButton ib_searchButton;
 	private ListView lv;
 	private InputMethodManager imm;
@@ -63,24 +67,26 @@ public class Translate_Activity extends ListActivity {
 		wordReferenceClient = ServiceClient.getInstance().getClient(this,
 						WordReferenceClient.class);
 
-		// List & listview
-		translateList = new ArrayList<Term>();
-		lv = (ListView) findViewById(android.R.id.list);
+		// Init UI
+		this.translateList = new ArrayList<Term>();
+		this.lv = (ListView) findViewById(android.R.id.list);
+		this.tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
+		this.etTranslateCaption = (EditText) (findViewById(R.id.search));
+		this.ib_searchButton = (ImageButton) findViewById(R.id.translate);
 
-		ib_searchButton = (ImageButton) findViewById(R.id.translate);
+		
 		ib_searchButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-				//Make visible progress icon
-				setProgressBarIndeterminateVisibility(Boolean.TRUE);
-				
-				EditText etTranslateCaption = (EditText) (findViewById(R.id.search));
+			public void onClick(View view) {		
 				String word_to_translate;
 				try {
 					
 					word_to_translate = URLEncoder.encode(etTranslateCaption.getText().toString(), "UTF-8");
 					if (!word_to_translate.equals("")) {
-						//translate(word_to_translate);
+						//Make visible progress icon
+						setProgressBarIndeterminateVisibility(Boolean.TRUE);
+						//Hide keyboard
+						imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+						//Call to Translate Method
 						getTranslation(word_to_translate);
 					}
 				
@@ -98,7 +104,6 @@ public class Translate_Activity extends ListActivity {
 	private void showResults(final List<Term> translateList, final Term originalWord) {
 
 		//Make visible title of search "Possible Translations:"
-		TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
 		tvTitleTerm.setText(getString(R.string.translate_possible_translation));
 		tvTitleTerm.setVisibility(1);
 		
@@ -107,13 +112,6 @@ public class Translate_Activity extends ListActivity {
 		    translationTerm.add(term.getTerm());
 		}
 		
-		// This is a simple adapter that accepts as parameter
-		// Context
-		// Data list
-		// The row layout that is used during the row creation
-		// The keys used to retrieve the data
-		// The View id used to show the data. The key number and the view id must match
-		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.translate_row,R.id.tvTerm, translationTerm);
 		TermAdapter adapter = new TermAdapter(LinguamApplication.getContext(), translateList);
 		lv.setAdapter(adapter);
 		
@@ -126,22 +124,25 @@ public class Translate_Activity extends ListActivity {
 			{
 				Toast toast;
 				if (saveOriginalWord(originalWord) != null) {
-					saveTranslateWord(translateList.get(position),originalWord);
-					toast = Toast.makeText(LinguamApplication.getContext(), "TranslationOrginal: " + originalWord.getTerm() + " AND Trans: " + translateList.get(position).getTerm() + " saved", Toast.LENGTH_SHORT);
+					if (saveTranslateWord(translateList.get(position),originalWord) != null){
+						String strTranslationSavedOriginal = getResources().getString(R.string.translation_saved);
+						String strTranslationSavedFinal = String.format(strTranslationSavedOriginal, originalWord.getTerm(), translateList.get(position).getTerm());
+						toast = Toast.makeText(LinguamApplication.getContext(), strTranslationSavedFinal, Toast.LENGTH_SHORT);
+						toast.show();
+					}
 				}else{
-					toast = Toast.makeText(LinguamApplication.getContext(), "You can only have a translation for '" + originalWord.getTerm() + "'", Toast.LENGTH_SHORT);
+					String strAlreadyTranslatedOriginal = getResources().getString(R.string.already_traslated);
+					String strAlreadyTranslatedFinal = String.format(strAlreadyTranslatedOriginal, originalWord.getTerm());
+					toast = Toast.makeText(LinguamApplication.getContext(), strAlreadyTranslatedFinal, Toast.LENGTH_SHORT);
+					toast.show();
 				}
 				
-				toast.show();
 				
 				//Reset layout to init of activity
-				EditText translate_caption = (EditText) (findViewById(R.id.search));
-				translate_caption.setText(null);
-				
-				TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
+				etTranslateCaption.setText(null);
 				tvTitleTerm.setVisibility(-1);
-
 				lv.setAdapter(null);
+				
 			}});
 		
 	}
@@ -151,8 +152,8 @@ public class Translate_Activity extends ListActivity {
 		return newOriginalWord;
 	}
 
-	private void saveTranslateWord(Term translateWord, Term originalWord) {
-		LinguamApplication.translatedWordDB.createTranslation(translateWord, true,
+	private TranslatedWord saveTranslateWord(Term translateWord, Term originalWord) {
+		return LinguamApplication.translatedWordDB.createTranslation(translateWord, true,
 				originalWord.getTerm());
 	}
 	
@@ -170,7 +171,6 @@ public class Translate_Activity extends ListActivity {
 				
 				Log.e(TAG, err.toString(), err);
 				// TODO Auto-generated catch block
-				TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
 				tvTitleTerm.setText(getString(R.string.translate_possible_translation) +" "+ getString(R.string.translate_no_result));
 				tvTitleTerm.setVisibility(1);
 				
@@ -188,13 +188,11 @@ public class Translate_Activity extends ListActivity {
 				
 				if (response.getAsJsonObject().get("Error") != null){
 					
-					TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
 					tvTitleTerm.setText(getString(R.string.translate_possible_translation) +" "+ getString(R.string.translate_no_result));
 					tvTitleTerm.setVisibility(1);
 					
 				}else{
 					
-					TextView tvTitleTerm = (TextView)(findViewById(R.id.tvTitleTerm));
 					tvTitleTerm.setText(getString(R.string.translate_possible_translation));
 					tvTitleTerm.setVisibility(-1);
 					

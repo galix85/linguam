@@ -54,16 +54,17 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f050002;
+        public static final int already_traslated=0x7f050007;
         /**  General Strings  
          */
         public static final int app_name=0x7f050000;
-        public static final int ictext_play=0x7f050008;
+        public static final int ictext_play=0x7f05000a;
         /**  Main Activity icon text 
          */
-        public static final int ictext_search=0x7f050007;
+        public static final int ictext_search=0x7f050009;
         /**  Play Button Strings  
          */
-        public static final int playgame_button=0x7f050009;
+        public static final int playgame_button=0x7f05000b;
         /**  Translate Button Strings  
          */
         public static final int tanslate_button=0x7f050003;
@@ -71,6 +72,7 @@ public final class R {
         public static final int translate_no_result=0x7f050005;
         public static final int translate_possible_translation=0x7f050006;
         public static final int translate_word_hint=0x7f050004;
+        public static final int translation_saved=0x7f050008;
     }
     public static final class style {
         /** 
