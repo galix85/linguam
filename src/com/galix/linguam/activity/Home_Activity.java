@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.galix.linguam.R;
 
-public class Home extends Activity {
+public class Home_Activity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class Home extends Activity {
 	}
 	
 	public void to_play_activity(View view){
-		Intent i = new Intent(this, Translate_Activity.class);
+		Intent i = new Intent(this, Game_Activity.class);
 		startActivity(i); 
 	}
 

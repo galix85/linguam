@@ -3,6 +3,7 @@ package com.galix.linguam.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.galix.linguam.pojo.PairWord;
 import com.galix.linguam.pojo.Term;
 import com.galix.linguam.pojo.TranslatedWord;
 
@@ -74,10 +75,12 @@ public class TranslationDBAdapter {
 	}
 
 	public List<TranslatedWord> getAllTranslates() {
+		
+
 		List<TranslatedWord> translationWords = new ArrayList<TranslatedWord>();
 
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_TRANSLATION,
-				allColumns, null, null, null, null, null);
+				allColumns, null, null, null, null,null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -89,6 +92,7 @@ public class TranslationDBAdapter {
 		cursor.close();
 		return translationWords;
 	}
+
 
 	public boolean exist(String term, String pos, String sense) {
 	    
@@ -148,6 +152,60 @@ public class TranslationDBAdapter {
 		
 		
 		
+	}
+	
+	
+	public ArrayList<String> getPaddingWordList(String originalWord, int nWords) {
+
+		
+		ArrayList<String> paddingWordList = new ArrayList<String>();
+		
+		String selection = "originalword!=? AND selected=?";
+    	String[] selectionArgs = {originalWord,"0"};
+    	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
+    	
+    	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, "RANDOM() limit "+nWords );
+    	if (cursor.moveToFirst()){
+    		cursor.moveToFirst();
+    		int count = 0;
+    		do {
+    			paddingWordList.add(cursor.getString(1));
+    			count ++;    			
+    	     } while(cursor.moveToNext() && count < nWords);
+			
+			return paddingWordList;
+			
+    	}else{
+    		return null;
+    	}
+    	
+	}
+	
+	public ArrayList<PairWord> getPairWord() {
+
+		ArrayList<PairWord> translationWords = new ArrayList<PairWord>();
+
+		
+		String selection = "selected=?";
+    	String[] selectionArgs = {"1"};
+    	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
+    	
+    	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, null);
+    	if (cursor.moveToFirst()){
+    		  do {
+    			  PairWord pair = new PairWord();
+    			  pair.setOriginalWord(cursor.getString(5));
+    			  pair.setTranslateWord(cursor.getString(1));
+    			  //pair.setLevel(cursor.getInt(2));
+    			  pair.setLevel(1);
+    	          translationWords.add(pair);
+    	     } while(cursor.moveToNext());
+			
+			return translationWords;
+    	}else{
+    		return null;
+    	}
+    	
 	}
 
 	public void open() throws SQLException {

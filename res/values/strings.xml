@@ -4,6 +4,7 @@
     <!-- General Strings  -->
     <string name="app_name">Linguam</string>
     <string name="translate_activity_title">Linguam - Translate</string>
+    <string name="game_activity_title">Linguam - Game</string>
     <string name="action_settings">Settings</string>
 
     <!-- Translate Button Strings  -->
@@ -20,5 +21,8 @@
     
     <!-- Play Button Strings  -->
     <string name="playgame_button">Play</string>
+    
+    <!--  Score Strings -->
+	<string name="score_module">Score Module</string>
 
 </resources>

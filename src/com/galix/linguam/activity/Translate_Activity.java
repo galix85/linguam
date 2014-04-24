@@ -61,7 +61,7 @@ public class Translate_Activity extends ListActivity {
 		getIntent();
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.translate_main_layout);
+		setContentView(R.layout.translate_layout);
 		
 		// Client object with actions interface of beach.
 		wordReferenceClient = ServiceClient.getInstance().getClient(this,
@@ -125,6 +125,7 @@ public class Translate_Activity extends ListActivity {
 				Toast toast;
 				if (saveOriginalWord(originalWord) != null) {
 					if (saveTranslateWord(translateList.get(position),originalWord) != null){
+						saveOtherTranslationWord(translateList, originalWord);
 						String strTranslationSavedOriginal = getResources().getString(R.string.translation_saved);
 						String strTranslationSavedFinal = String.format(strTranslationSavedOriginal, originalWord.getTerm(), translateList.get(position).getTerm());
 						toast = Toast.makeText(LinguamApplication.getContext(), strTranslationSavedFinal, Toast.LENGTH_SHORT);
@@ -155,6 +156,15 @@ public class Translate_Activity extends ListActivity {
 	private TranslatedWord saveTranslateWord(Term translateWord, Term originalWord) {
 		return LinguamApplication.translatedWordDB.createTranslation(translateWord, true,
 				originalWord.getTerm());
+	}
+	
+	private void saveOtherTranslationWord(List<Term> translateWord, Term originalWord) {
+		
+		for (Term term: translateWord) {
+			LinguamApplication.translatedWordDB.createTranslation(term, false,
+					originalWord.getTerm());
+		}
+
 	}
 	
 	/**

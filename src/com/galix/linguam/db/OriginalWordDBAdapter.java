@@ -125,6 +125,30 @@ public class OriginalWordDBAdapter {
 	}
 		
 	
+	public List<OriginalWord> getWordByLevel(int level,int limit) {
+	    
+		List<OriginalWord> originalWords = new ArrayList<OriginalWord>();
+
+		//String selection = "level=?";
+    	//String[] selectionArgs = {level};
+		
+		Cursor cursor = database.query(MySQLiteHelper.TABLE_ORIGINALWORD,
+				allColumns, null, null, null, null, String.valueOf(limit));
+
+		cursor.moveToFirst();
+		
+		while (!cursor.isAfterLast()) {
+			OriginalWord originalWord = cursorToOriginalWord(cursor);
+			originalWords.add(originalWord);
+			cursor.moveToNext();
+		}
+		
+		// make sure to close the cursor
+		cursor.close();
+		return originalWords;
+
+}
+	
 	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
 	}
