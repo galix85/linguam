@@ -3,6 +3,7 @@ package com.galix.linguam.activity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -97,19 +98,34 @@ public class Game_Activity extends Activity {
 			btn2.setText(word.getPairWord().getTranslateWord().toUpperCase(Locale.ITALIAN));
 			
 		}else if (word.getPairWord().getLevel() == 3 || word.getPairWord().getLevel() == 4){
+	
 			//Set view of group2
 			setViewSecondGroup();
+					
+			//Get id of buttons. (Random)
+			ArrayList<Integer> numbers = Util.generateRandomNumber(22, 25);
+			
 			//Get id of buttons to set texts
-			Button btn1 = (Button)findViewById(22);
-			Button btn2 = (Button)findViewById(23);
-			Button btn3 = (Button)findViewById(24);
-			Button btn4 = (Button)findViewById(25);
+			Button btn1 = (Button)findViewById(numbers.get(0));
+			Button btn2 = (Button)findViewById(numbers.get(1));
+			Button btn3 = (Button)findViewById(numbers.get(2));
+			Button btn4 = (Button)findViewById(numbers.get(3));
+
+			//Set text of possible ans
+			btn1.setText(word.getPaddingWordList().get(0).toUpperCase(Locale.ITALIAN));
+			btn2.setText(word.getPairWord().getTranslateWord().toUpperCase(Locale.ITALIAN));
+			btn3.setText(word.getPaddingWordList().get(1).toUpperCase(Locale.ITALIAN));
+			btn4.setText(word.getPaddingWordList().get(2).toUpperCase(Locale.ITALIAN));
+	
+			
 		}else{
 			setViewThirdGroup();
 		}
 			
 		
 	}
+	
+
 	
 	private GameData nextWord(){
 		if (iterWords.hasNext()) {
@@ -194,19 +210,26 @@ public class Game_Activity extends Activity {
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
 		
 		LinearLayout l1 = new LinearLayout(this);
+		LinearLayout l2 = new LinearLayout(this);
 		
-		if(((LinearLayout) l1).getChildCount() > 0) 
-		    ((LinearLayout) l1).removeAllViews(); 
-		
-		Button btn1 = new Button(this);
-		btn1.setId(22);
-		Button btn2 = new Button(this);
-		btn1.setId(23);
-		
+		//Reset view
+		LinearLayout l1past = (LinearLayout)findViewById(11);
+		if(l1past != null && l1past.getChildCount() > 0) {
+			lp.removeView(l1past); 
+		}
+		LinearLayout l2past = (LinearLayout)findViewById(12);
+		if(l2past != null && l2past.getChildCount() > 0) {
+			lp.removeView(l2past); 
+		}
+
+		//Set params l1 
+		l1.setId(11);
 		l1.setGravity(Gravity.BOTTOM);
 		l1.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT, 0));
 		l1.setOrientation(LinearLayout.HORIZONTAL);
 		
+		final Button btn1 = new Button(this);
+		btn1.setId(22);
 		btn1.setBackgroundResource(R.drawable.buttonshape);
 		btn1.setTextColor(getResources().getColor(R.color.White));
 		btn1.setTextSize(18);
@@ -214,10 +237,14 @@ public class Game_Activity extends Activity {
         btn1.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
-	                
+	        	boolean correct = gameEngine.checkAnswer(btn1.getText().toString(), gameIter.getPairWord().getOriginalWord());
+        		updateStats(correct,gameIter);
 	            }           
 	    });
         
+        
+        final Button btn2 = new Button(this);
+		btn2.setId(23);
         btn2.setBackgroundResource(R.drawable.buttonshape);
 		btn2.setTextColor(getResources().getColor(R.color.White));
 		btn2.setTextSize(18);
@@ -225,24 +252,19 @@ public class Game_Activity extends Activity {
         btn2.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
-	                
+	        	boolean correct = gameEngine.checkAnswer(btn2.getText().toString(), gameIter.getPairWord().getOriginalWord());
+        		updateStats(correct,gameIter);
 	            }           
 	    });
-		
-        LinearLayout l2 = new LinearLayout(this);
-        
-        if(((LinearLayout) l2).getChildCount() > 0) 
-		    ((LinearLayout) l2).removeAllViews(); 
-        
-		Button btn3 = new Button(this);
-		btn1.setId(24);
-		Button btn4 = new Button(this);
-		btn1.setId(25);
-		
+
+        //Set params l2 
+		l2.setId(12);
 		l2.setGravity(Gravity.BOTTOM);
 		l2.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT, 0));
 		l2.setOrientation(LinearLayout.HORIZONTAL);
 		
+		final Button btn3 = new Button(this);
+		btn3.setId(24);
 		btn3.setBackgroundResource(R.drawable.buttonshape);
 		btn3.setTextColor(getResources().getColor(R.color.White));
 		btn3.setTextSize(18);
@@ -250,10 +272,13 @@ public class Game_Activity extends Activity {
 		btn3.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
-	                
+	        	boolean correct = gameEngine.checkAnswer(btn3.getText().toString(), gameIter.getPairWord().getOriginalWord());
+        		updateStats(correct,gameIter);
 	            }           
 	    });
         
+		final Button btn4 = new Button(this);
+		btn4.setId(25);
 		btn4.setBackgroundResource(R.drawable.buttonshape);
 		btn4.setTextColor(getResources().getColor(R.color.White));
 		btn4.setTextSize(18);
@@ -261,7 +286,8 @@ public class Game_Activity extends Activity {
 		btn4.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
-	                
+	        	boolean correct = gameEngine.checkAnswer(btn4.getText().toString(), gameIter.getPairWord().getOriginalWord());
+        		updateStats(correct,gameIter);
 	            }           
 	    });
 		

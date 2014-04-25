@@ -197,7 +197,7 @@ public class TranslationDBAdapter {
     			  pair.setOriginalWord(cursor.getString(5));
     			  pair.setTranslateWord(cursor.getString(1));
     			  //pair.setLevel(cursor.getInt(2));
-    			  pair.setLevel(1);
+    			  pair.setLevel(3);
     	          translationWords.add(pair);
     	     } while(cursor.moveToNext());
 			
