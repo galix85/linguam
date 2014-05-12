@@ -8,7 +8,8 @@ public class TranslatedWord {
     String sense;
     String usage;
     int selected;
-    long originalwordFK;
+    String originalword;
+    int level;
 	
     public int getId() {
 		return id;
@@ -47,11 +48,31 @@ public class TranslatedWord {
 	public void setSelected(int selected) {
 		this.selected = selected;
 	}
-	public long getOriginalwordFK() {
-		return originalwordFK;
+	
+	/**
+	 * @return the originalword
+	 */
+	public String getOriginalword() {
+		return originalword;
 	}
-	public void setOriginalwordFK(long originalwordFK) {
-		this.originalwordFK = originalwordFK;
+	/**
+	 * @param originalword the originalword to set
+	 */
+	public void setOriginalword(String originalword) {
+		this.originalword = originalword;
+	}
+
+	/**
+	 * @return the level
+	 */
+	public int getLevel() {
+		return level;
+	}
+	/**
+	 * @param level the level to set
+	 */
+	public void setLevel(int level) {
+		this.level = level;
 	}
 	
 	@Override

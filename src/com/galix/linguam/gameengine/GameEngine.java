@@ -1,6 +1,8 @@
 package com.galix.linguam.gameengine;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
@@ -40,25 +42,27 @@ public class GameEngine {
 		//get pair
 		ArrayList<GameData> gameDataList = new ArrayList<GameData>();
 		ArrayList<PairWord> allTranslateWordList = LinguamApplication.translatedWordDB.getPairWord();
-		for (PairWord pairWord : allTranslateWordList) {
-			//fill padding words
-			
-			int nWords = 0;
-			if (pairWord.getLevel() == 1 || pairWord.getLevel() == 2) {
-				nWords = 1;
-			}else if(pairWord.getLevel() == 3 || pairWord.getLevel() == 4){
-				nWords = 3;
+		if (allTranslateWordList != null || allTranslateWordList.size() > 0){
+			for (PairWord pairWord : allTranslateWordList) {
+				//fill padding words
+				
+				int nWords = 0;
+				if (pairWord.getLevel() == 1 || pairWord.getLevel() == 2) {
+					nWords = 1;
+				}else if(pairWord.getLevel() == 3 || pairWord.getLevel() == 4){
+					nWords = 3;
+				}
+				
+				ArrayList<String> paddingWords = LinguamApplication.translatedWordDB.getPaddingWordList(pairWord.getOriginalWord(), nWords);
+	
+				//Set info to GameData object
+				GameData gameData = new GameData();
+				gameData.setPairWord(pairWord);
+				gameData.setPaddingWordList(paddingWords);
+				
+				//Add to list of gameData
+				gameDataList.add(gameData);
 			}
-			
-			ArrayList<String> paddingWords = LinguamApplication.translatedWordDB.getPaddingWordList(pairWord.getOriginalWord(), nWords);
-
-			//Set info to GameData object
-			GameData gameData = new GameData();
-			gameData.setPairWord(pairWord);
-			gameData.setPaddingWordList(paddingWords);
-			
-			//Add to list of gameData
-			gameDataList.add(gameData);
 		}
 		
 		return gameDataList;
@@ -73,14 +77,18 @@ public class GameEngine {
 	 */
 	public boolean checkAnswer(String checkedAnswer, String originalWord){
 		
+		Collator collator = Collator.getInstance(LinguamApplication.spanish_locale);
+		collator.setStrength(Collator.PRIMARY);
+		
 		TranslatedWord translatedWord = LinguamApplication.translatedWordDB.getTranslateByWord(originalWord);
-		String correctAnswer = translatedWord.getTerm();
-		
-		if (correctAnswer.toUpperCase().equals(checkedAnswer))
+		String correctAnswer = translatedWord.getTerm().toUpperCase(LinguamApplication.spanish_locale);
+		checkedAnswer = checkedAnswer.toUpperCase(LinguamApplication.spanish_locale);
+		if (collator.compare(correctAnswer, checkedAnswer) == 0){
 			return true;
-		
-		return false;
-		
+		}else{
+			return false;
+		}
+
 	}
 	
 		

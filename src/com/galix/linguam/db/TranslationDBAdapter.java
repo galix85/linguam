@@ -25,7 +25,8 @@ public class TranslationDBAdapter {
 			MySQLiteHelper.COLUMN_TRANSLATION_TERM,
 			MySQLiteHelper.COLUMN_TRANSLATION_USAGE,
 			MySQLiteHelper.COLUMN_TRANSLATION_ORIGINALWORD,
-			MySQLiteHelper.COLUMN_TRANSLATION_SELECTED};
+			MySQLiteHelper.COLUMN_TRANSLATION_SELECTED,
+			MySQLiteHelper.COLUMN_TRANSLATION_LEVEL};
 
 	public TranslationDBAdapter(Context context) {
 		dbHelper = new MySQLiteHelper(context);
@@ -47,6 +48,7 @@ public class TranslationDBAdapter {
 				originalword);
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_SELECTED,
 			    selected ? 1 : 0);
+		values.put(MySQLiteHelper.COLUMN_TRANSLATION_LEVEL,1);
 
 		if (!exist(translation.getTerm(),translation.getPOS(),translation.getSense())){
 			
@@ -103,10 +105,10 @@ public class TranslationDBAdapter {
     	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
     	Cursor c = database.query(tableName, null, selection, selectionArgs, null, null, null);
         if (c != null && c.getCount() != 0) {
-        	Log.v("TranslationDBAdapter - getCount", "Exist");
+        	//Log.v("TranslationDBAdapter - getCount", "Exist");
             result = true;
         }else{
-        	Log.v("TranslationWordDBAdapter - getCount", "Not Exist");
+        	//Log.v("TranslationWordDBAdapter - getCount", "Not Exist");
 	        result = false;
 	        
         }
@@ -142,11 +144,11 @@ public class TranslationDBAdapter {
 			
 	    	// make sure to close the cursor
 			cursor.close();
-			Log.v("TranslationDBAdapter - getTranslateByWord:", "Word already exist, returning saved word:" + translationWords.get(0).getTerm() );
+			//Log.v("TranslationDBAdapter - getTranslateByWord:", "Word already exist, returning saved word:" + translationWords.get(0).getTerm() );
 			return translationWords.get(0);
     	}else{
     		cursor.close();
-    		Log.v("TranslationDBAdapter - getTranslateByWord:", "Not Exist");
+    		//Log.v("TranslationDBAdapter - getTranslateByWord:", "Not Exist");
     		return null;
     	}
 		
@@ -196,8 +198,7 @@ public class TranslationDBAdapter {
     			  PairWord pair = new PairWord();
     			  pair.setOriginalWord(cursor.getString(5));
     			  pair.setTranslateWord(cursor.getString(1));
-    			  //pair.setLevel(cursor.getInt(2));
-    			  pair.setLevel(3);
+    			  pair.setLevel(cursor.getInt(7));
     	          translationWords.add(pair);
     	     } while(cursor.moveToNext());
 			
@@ -208,6 +209,14 @@ public class TranslationDBAdapter {
     	
 	}
 
+	public void updateLevel(String word, int level){
+		
+		ContentValues cv = new ContentValues();
+		cv.put(MySQLiteHelper.COLUMN_TRANSLATION_LEVEL,level);
+		database.update(MySQLiteHelper.TABLE_TRANSLATION,cv, MySQLiteHelper.COLUMN_TRANSLATION_TERM +" like '"+ word +"' AND " + 
+		MySQLiteHelper.COLUMN_TRANSLATION_SELECTED +" = "+ 1 ,null);
+	}
+	
 	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
 	}

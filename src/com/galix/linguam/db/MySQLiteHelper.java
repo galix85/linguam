@@ -15,6 +15,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_TRANSLATION_USAGE = "usage";
 	public static final String COLUMN_TRANSLATION_ORIGINALWORD = "originalword";
 	public static final String COLUMN_TRANSLATION_SELECTED = "selected";
+	public static final String COLUMN_TRANSLATION_LEVEL = "level";
 
 	public static final String TABLE_ORIGINALWORD = "originalword";
 	public static final String COLUMN_ORIGINALWORD_ID = "_id";
@@ -24,7 +25,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_ORIGINALWORD_USAGE = "usage";
 
 	private static final String DATABASE_NAME = "linguam.db";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_TRANSLATION = "create table "
@@ -34,7 +35,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ COLUMN_TRANSLATION_SENSE + " text" + ", "
 			+ COLUMN_TRANSLATION_USAGE + " text" + ", "
 			+ COLUMN_TRANSLATION_ORIGINALWORD + " text" + ", "
-			+ COLUMN_TRANSLATION_SELECTED + " integer);";
+			+ COLUMN_TRANSLATION_SELECTED + " integer" + ", "
+			+ COLUMN_TRANSLATION_LEVEL + " integer);";
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_ORIGINALWORD = "create table "

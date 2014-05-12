@@ -21,6 +21,8 @@
 package com.galix.linguam;
 
 
+import java.util.Locale;
+
 import com.galix.linguam.db.OriginalWordDBAdapter;
 import com.galix.linguam.db.TranslationDBAdapter;
 
@@ -34,7 +36,7 @@ public class LinguamApplication extends Application {
 	private static LinguamApplication instance = null;
 	public static OriginalWordDBAdapter originalWordDB = null;
 	public static TranslationDBAdapter translatedWordDB = null;
-
+	public static Locale spanish_locale;
 	
 	@Override
 	public void onCreate() {
@@ -43,6 +45,7 @@ public class LinguamApplication extends Application {
 		appContext = getApplicationContext();
 		originalWordDB = new OriginalWordDBAdapter(appContext);
 		translatedWordDB = new TranslationDBAdapter(appContext);
+		spanish_locale = new Locale("es", "ES");
 	}
 	
 	

@@ -18,9 +18,12 @@
     <!-- Main Activity icon text -->
     <string name="ictext_search">Find your word!</string>
     <string name="ictext_play">Let\'s play!</string>
+    <string name="no_words">You need at least 10 words to play</string>
     
     <!-- Play Button Strings  -->
     <string name="playgame_button">Play</string>
+    <string name="check_button">Check</string>
+    <string name="text_level5_hint">Type your answer</string>
     
     <!--  Score Strings -->
 	<string name="score_module">Score Module</string>

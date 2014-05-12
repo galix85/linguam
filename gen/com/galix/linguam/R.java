@@ -217,20 +217,23 @@ public final class R {
         /**  General Strings  
          */
         public static final int app_name=0x7f060000;
+        public static final int check_button=0x7f06000e;
         public static final int game_activity_title=0x7f060002;
         public static final int ictext_play=0x7f06000b;
         /**  Main Activity icon text 
          */
         public static final int ictext_search=0x7f06000a;
+        public static final int no_words=0x7f06000c;
         /**  Play Button Strings  
          */
-        public static final int playgame_button=0x7f06000c;
+        public static final int playgame_button=0x7f06000d;
         /**   Score Strings 
          */
-        public static final int score_module=0x7f06000d;
+        public static final int score_module=0x7f060010;
         /**  Translate Button Strings  
          */
         public static final int tanslate_button=0x7f060004;
+        public static final int text_level5_hint=0x7f06000f;
         public static final int translate_activity_title=0x7f060001;
         public static final int translate_no_result=0x7f060006;
         public static final int translate_possible_translation=0x7f060007;
