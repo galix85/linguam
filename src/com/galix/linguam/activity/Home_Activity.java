@@ -1,17 +1,13 @@
 package com.galix.linguam.activity;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
-import com.galix.linguam.pojo.TranslatedWord;
 
 public class Home_Activity extends Activity {
 

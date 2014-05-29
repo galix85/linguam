@@ -14,8 +14,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+
 public class TranslationDBAdapter {
 
+	private static final String TAG = "Linguam: Translation Adapter";
+	
 	// Database fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
@@ -60,6 +63,8 @@ public class TranslationDBAdapter {
 			cursor.moveToFirst();
 			TranslatedWord newTranslation = cursorToTranslate(cursor);
 			cursor.close();
+			Log.v(TAG, "New word saved (" + translation.getTerm() +")");
+			
 			return newTranslation;
 			
 		}else{
@@ -71,14 +76,12 @@ public class TranslationDBAdapter {
 
 	public void deleteTranslation(TranslatedWord translation) {
 		long id = translation.getId();
-		System.out.println("Comment deleted with id: " + id);
 		database.delete(MySQLiteHelper.TABLE_TRANSLATION,
 				MySQLiteHelper.COLUMN_TRANSLATION_ID + " = " + id, null);
 	}
 
 	public List<TranslatedWord> getAllTranslates() {
 		
-
 		List<TranslatedWord> translationWords = new ArrayList<TranslatedWord>();
 
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_TRANSLATION,
@@ -105,12 +108,9 @@ public class TranslationDBAdapter {
     	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
     	Cursor c = database.query(tableName, null, selection, selectionArgs, null, null, null);
         if (c != null && c.getCount() != 0) {
-        	//Log.v("TranslationDBAdapter - getCount", "Exist");
             result = true;
         }else{
-        	//Log.v("TranslationWordDBAdapter - getCount", "Not Exist");
 	        result = false;
-	        
         }
         c.close();
         return result;
@@ -141,15 +141,14 @@ public class TranslationDBAdapter {
 				translationWords.add(translation);
 				cursor.moveToNext();
 			}
-			
+	    	
 	    	// make sure to close the cursor
 			cursor.close();
-			//Log.v("TranslationDBAdapter - getTranslateByWord:", "Word already exist, returning saved word:" + translationWords.get(0).getTerm() );
+
 			return translationWords.get(0);
     	}else{
     		cursor.close();
-    		//Log.v("TranslationDBAdapter - getTranslateByWord:", "Not Exist");
-    		return null;
+          	return null;
     	}
 		
 		
@@ -159,7 +158,6 @@ public class TranslationDBAdapter {
 	
 	public ArrayList<String> getPaddingWordList(String originalWord, int nWords) {
 
-		
 		ArrayList<String> paddingWordList = new ArrayList<String>();
 		
 		String selection = "originalword!=? AND selected=?";
@@ -171,9 +169,10 @@ public class TranslationDBAdapter {
     		cursor.moveToFirst();
     		int count = 0;
     		do {
-    			paddingWordList.add(cursor.getString(1));
-    			count ++;    			
-    	     } while(cursor.moveToNext() && count < nWords);
+    			if (!paddingWordList.contains(cursor.getString(1) ))
+    				paddingWordList.add(cursor.getString(1));
+    				count ++;    			
+    		} while(cursor.moveToNext() && count < nWords);
 			
 			return paddingWordList;
 			
@@ -188,8 +187,8 @@ public class TranslationDBAdapter {
 		ArrayList<PairWord> translationWords = new ArrayList<PairWord>();
 
 		
-		String selection = "selected=?";
-    	String[] selectionArgs = {"1"};
+		String selection = "selected=? AND level<?";
+    	String[] selectionArgs = {"1","6"};
     	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
     	
     	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, null);

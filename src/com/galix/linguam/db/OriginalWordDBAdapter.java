@@ -15,6 +15,8 @@ import com.galix.linguam.pojo.Term;
 
 public class OriginalWordDBAdapter {
 
+	private static final String TAG = "Linguam: Original Adapter";
+	
 	// Database fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
@@ -55,7 +57,7 @@ public class OriginalWordDBAdapter {
 			cursor.moveToFirst();
 			OriginalWord newOriginalWord = cursorToOriginalWord(cursor);
 			cursor.close();
-			
+			Log.v(TAG, "New word saved (" + originalWord.getTerm() +")");
 			return newOriginalWord;
 		
 		}else{
@@ -112,10 +114,10 @@ public class OriginalWordDBAdapter {
 	    	String tableName = MySQLiteHelper.TABLE_ORIGINALWORD;
 	    	Cursor c = database.query(tableName, null, selection, selectionArgs, null, null, null);
 	        if (c != null && c.getCount() != 0) {
-	        	Log.v("OriginalWordDBAdapter - getCount", "Exist");
+	        	Log.v(TAG, "Exist");
 	            result = true;
 	        }else{
-	        	Log.v("OriginalWordDBAdapter - getCount", "Not Exist");
+	        	Log.v(TAG, "Not Exist");
 		        result = false;
 		        
 	        }

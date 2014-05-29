@@ -24,8 +24,13 @@
     <string name="playgame_button">Play</string>
     <string name="check_button">Check</string>
     <string name="text_level5_hint">Type your answer</string>
+    <string name="no_more_words">Uau you\'re amazing!! Please search more words to continue playing</string>
+    <string name="correct">CORRECT</string>
+    <string name="incorrect">INCORRECT</string>
+    
     
     <!--  Score Strings -->
-	<string name="score_module">Score Module</string>
+	<string name="score">TOTAL SCORE:</string>
+	<string name="level">WORD LEVEL:</string>
 
 </resources>

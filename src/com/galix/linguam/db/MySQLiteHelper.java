@@ -23,9 +23,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_ORIGINALWORD_POS = "pos";
 	public static final String COLUMN_ORIGINALWORD_SENSE = "sense";
 	public static final String COLUMN_ORIGINALWORD_USAGE = "usage";
+	
+	public static final String TABLE_STATISTICS = "statitstics";
+	public static final String COLUMN_STATISTICS_SCORE = "score";
 
 	private static final String DATABASE_NAME = "linguam.db";
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 10;
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_TRANSLATION = "create table "
@@ -46,6 +49,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ ", " + COLUMN_ORIGINALWORD_SENSE + " text" + ", "
 			+ COLUMN_ORIGINALWORD_USAGE + " text);";
 	
+	// Database creation sql statement
+		private static final String CREATE_TABLE_STATISTICS = "create table "
+				+ TABLE_STATISTICS + "(" + COLUMN_STATISTICS_SCORE
+				+ " integer);";
+	
 
 	/**
 	 * Constructor should be private to prevent direct instantiation. make call
@@ -59,6 +67,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(CREATE_TABLE_TRANSLATION);
 		database.execSQL(CREATE_TABLE_ORIGINALWORD);
+		database.execSQL(CREATE_TABLE_STATISTICS);
 	}
 
 	@Override
@@ -68,6 +77,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 						+ newVersion + ", which will destroy all old data");
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORIGINALWORD);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSLATION);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATISTICS);
 		onCreate(db);
 	}
 

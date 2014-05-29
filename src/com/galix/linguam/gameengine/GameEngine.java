@@ -2,10 +2,8 @@ package com.galix.linguam.gameengine;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import com.galix.linguam.LinguamApplication;
-import com.galix.linguam.R;
 import com.galix.linguam.pojo.GameData;
 import com.galix.linguam.pojo.PairWord;
 import com.galix.linguam.pojo.TranslatedWord;
@@ -42,10 +40,9 @@ public class GameEngine {
 		//get pair
 		ArrayList<GameData> gameDataList = new ArrayList<GameData>();
 		ArrayList<PairWord> allTranslateWordList = LinguamApplication.translatedWordDB.getPairWord();
-		if (allTranslateWordList != null || allTranslateWordList.size() > 0){
+		if (allTranslateWordList != null && allTranslateWordList.size() > 0){
 			for (PairWord pairWord : allTranslateWordList) {
 				//fill padding words
-				
 				int nWords = 0;
 				if (pairWord.getLevel() == 1 || pairWord.getLevel() == 2) {
 					nWords = 1;
@@ -63,6 +60,8 @@ public class GameEngine {
 				//Add to list of gameData
 				gameDataList.add(gameData);
 			}
+		}else{
+			gameDataList.add(null);
 		}
 		
 		return gameDataList;
@@ -102,6 +101,7 @@ public class GameEngine {
 		return gameDataList;
 	}
 
+	
 	public void setGameDataList(ArrayList<GameData> gameDataList) {
 		GameEngine.gameDataList = gameDataList;
 	}

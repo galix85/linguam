@@ -3,13 +3,8 @@ package com.galix.linguam.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
-
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
 import android.content.Context;
 import android.util.Log;
 
@@ -56,7 +51,8 @@ public class ServiceClient {
 		
 		
 		if (mRestAdapter == null) {
-			mRestAdapter = new RestAdapter.Builder().setEndpoint(mBaseUrl).setLogLevel(RestAdapter.LogLevel.FULL).setRequestInterceptor(new RequestInterceptor() {
+			mRestAdapter = new RestAdapter.Builder().setEndpoint(mBaseUrl)//.setLogLevel(RestAdapter.LogLevel.FULL)
+					.setRequestInterceptor(new RequestInterceptor() {
 		        @Override
 		        public void intercept(RequestFacade request) {
 		            request.addHeader("Accept", "application/json; charset=UTF-8");
