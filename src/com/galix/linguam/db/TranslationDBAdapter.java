@@ -164,14 +164,18 @@ public class TranslationDBAdapter {
     	String[] selectionArgs = {originalWord,"0"};
     	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
     	
-    	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, "RANDOM() limit "+nWords );
+    	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, "RANDOM() "); // limit "+nWords );
     	if (cursor.moveToFirst()){
     		cursor.moveToFirst();
     		int count = 0;
     		do {
-    			if (!paddingWordList.contains(cursor.getString(1) ))
+    			if (!paddingWordList.contains(cursor.getString(1) )){
     				paddingWordList.add(cursor.getString(1));
     				count ++;    			
+    				Log.v(TAG,"Word ("+cursor.getString(1) +") added.");
+    				Log.v(TAG,"Count value = "+ count );
+    			}
+    			
     		} while(cursor.moveToNext() && count < nWords);
 			
 			return paddingWordList;
