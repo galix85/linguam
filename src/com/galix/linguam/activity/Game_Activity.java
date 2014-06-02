@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Path.FillType;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -181,7 +182,7 @@ public class Game_Activity extends Activity {
 			LinguamApplication.statisticDB.updateScore(scoreToUpdate);
 			//Correct answer
 			Log.v(TAG,getResources().getString(R.string.correct) + "(+"+ currentScore +" points)");
-			Toast correctToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.incorrect) + "(+"+ currentScore +" points)", Toast.LENGTH_SHORT);
+			Toast correctToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.correct) + "(+"+ currentScore +" points)", Toast.LENGTH_SHORT);
 			correctToast.show();
 			
 		}else{
@@ -274,7 +275,6 @@ public class Game_Activity extends Activity {
 	private void setViewSecondGroup(){
 		
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 70, 2);
-		
 		params.setMargins(2, 2, 2, 2);
 				
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
@@ -375,6 +375,9 @@ public class Game_Activity extends Activity {
 	 */
 	private void setViewThirdGroup(){
 		
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
+		params.setMargins(2, 2, 2, 2);
+		
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
 		
 		//Reset view
@@ -387,11 +390,11 @@ public class Game_Activity extends Activity {
 		//Set params l3 
 		l3.setId(50);
 		l3.setGravity(Gravity.BOTTOM);
-		l3.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT, 0));
+		l3.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT, 0));
 		l3.setOrientation(LinearLayout.HORIZONTAL);
 		
 		final EditText etCorrectAnswer = new EditText(this) ;
-		etCorrectAnswer.setLayoutParams(new LinearLayout.LayoutParams(330,70)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
+		etCorrectAnswer.setLayoutParams(new LinearLayout.LayoutParams(350,LayoutParams.WRAP_CONTENT)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
 		etCorrectAnswer.setGravity(Gravity.CENTER_HORIZONTAL);
 		etCorrectAnswer.setTextColor(getResources().getColor(R.color.Black));
 		etCorrectAnswer.setTextSize(20);
@@ -403,7 +406,7 @@ public class Game_Activity extends Activity {
 		btn1.setTextColor(getResources().getColor(R.color.White));
 		btn1.setTextSize(20);
 		btn1.setText(getResources().getString(R.string.check_button));
-		btn1.setLayoutParams(new LinearLayout.LayoutParams(100,70));
+		btn1.setLayoutParams(params);
         btn1.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
@@ -416,60 +419,7 @@ public class Game_Activity extends Activity {
         l3.addView(btn1);
         lp.addView(l3);
         setContentView(lp);
-		/*
-		//Reset view
-		LinearLayout l3past = (LinearLayout)findViewById(50);
-		if(l3past != null && l3past.getChildCount() > 0) {
-			lp.removeView(l3past); 
-		}
-		
-		LinearLayout l4past = (LinearLayout)findViewById(51);
-		if(l4past != null && l4past.getChildCount() > 0) {
-			lp.removeView(l4past); 
-		}
 
-		LinearLayout l3 = new LinearLayout(this);
-		//Set params l3 
-		l3.setId(50);
-		l3.setGravity(Gravity.BOTTOM);
-		l3.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT, 0));
-		l3.setOrientation(LinearLayout.HORIZONTAL);
-		
-		final EditText etCorrectAnswer = new EditText(this) ;
-		etCorrectAnswer.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
-		etCorrectAnswer.setGravity(Gravity.CENTER_HORIZONTAL);
-		etCorrectAnswer.setPadding(0, 32, 0, 0);
-		etCorrectAnswer.setTextColor(getResources().getColor(R.color.Black));
-		etCorrectAnswer.setTextSize(20);
-		etCorrectAnswer.setHint(R.string.text_level5_hint);
-	
-		
-		//Set params l2 
-		LinearLayout l4 = new LinearLayout(this);
-		l4.setId(51);
-		l4.setGravity(Gravity.BOTTOM);
-		l4.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT, 0));
-		l4.setOrientation(LinearLayout.HORIZONTAL);
-		
-		final Button btn1 = new Button(this);
-		btn1.setBackgroundResource(R.drawable.buttonshape);
-		btn1.setTextColor(getResources().getColor(R.color.White));
-		btn1.setTextSize(18);
-		btn1.setText(getResources().getString(R.string.check_button));
-		btn1.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,50,2));
-        btn1.setOnClickListener(new OnClickListener() {         
-	        @Override
-	        public void onClick(View v) {
-	        	boolean correct = gameEngine.checkAnswer(etCorrectAnswer.getText().toString(), gameIter.getPairWord().getOriginalWord());
-        		updateStats(correct,gameIter);
-	            }           
-	    });
-        
-        l3.addView(etCorrectAnswer);
-        l4.addView(btn1);
-        lp.addView(l3);
-        lp.addView(l4);
-        setContentView(lp);*/
 	}
 
 	private GameData nextWord(){
