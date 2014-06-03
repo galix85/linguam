@@ -1,7 +1,15 @@
 package com.galix.linguam.util;
 
 import java.util.ArrayList;
+
+import android.os.Build;
+import android.view.Display;
+import android.view.WindowManager;
+import android.graphics.Point;
 import java.util.Random;
+
+import android.annotation.TargetApi;
+import android.content.Context;
 
 public class Util {
 
@@ -32,4 +40,25 @@ public class Util {
 		return numbers;
 	}
 
+	
+	@SuppressWarnings("deprecation")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	public static int getWidth(Context ctxt){
+
+		int width=0;
+		
+	    WindowManager wm = (WindowManager) ctxt.getSystemService(Context.WINDOW_SERVICE);
+	    Display display = wm.getDefaultDisplay();
+	    
+	    if(Build.VERSION.SDK_INT>Build.VERSION_CODES.HONEYCOMB){                   
+	        Point size = new Point();
+	        display.getSize(size);
+	        width = size.x;
+	    }
+	    else{
+	        width = display.getWidth();  // deprecated
+	    }
+	    return width;
+		
+	}
 }

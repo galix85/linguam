@@ -7,8 +7,10 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Path.FillType;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -392,9 +394,9 @@ public class Game_Activity extends Activity {
 		l3.setGravity(Gravity.BOTTOM);
 		l3.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT, 0));
 		l3.setOrientation(LinearLayout.HORIZONTAL);
-		
+
 		final EditText etCorrectAnswer = new EditText(this) ;
-		etCorrectAnswer.setLayoutParams(new LinearLayout.LayoutParams(350,LayoutParams.WRAP_CONTENT)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
+		etCorrectAnswer.setLayoutParams(new LinearLayout.LayoutParams((int) (Util.getWidth(LinguamApplication.getContext()) * 0.75),LayoutParams.WRAP_CONTENT)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
 		etCorrectAnswer.setGravity(Gravity.CENTER_HORIZONTAL);
 		etCorrectAnswer.setTextColor(getResources().getColor(R.color.Black));
 		etCorrectAnswer.setTextSize(20);
@@ -410,7 +412,11 @@ public class Game_Activity extends Activity {
         btn1.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
-	        	boolean correct = gameEngine.checkAnswer(etCorrectAnswer.getText().toString(), gameIter.getPairWord().getOriginalWord());
+	        	// Hide keyboard
+				imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	        	//Trimm trailing withe spaces
+	        	String trimmedText = etCorrectAnswer.getText().toString().replaceAll("\\s+$", "");
+	        	boolean correct = gameEngine.checkAnswer(trimmedText, gameIter.getPairWord().getOriginalWord());
         		updateStats(correct,gameIter);
 	            }           
 	    });

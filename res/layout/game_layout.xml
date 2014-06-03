@@ -24,14 +24,6 @@
             android:textSize="16sp" >
         </TextView>
         
-        <!-- EditText 
-            android:id="@+id/etScore"
-            android:layout_width="match_parent"
-            android:layout_height="86dp"
-            android:text="@string/score"
-            android:textAlignment="center"
-            android:textColor="#000000">
-        </EditText-->
                 
         <TextView
             android:id="@+id/tvLevel"
@@ -43,15 +35,6 @@
             android:textColor="#000000"
             android:textSize="16sp" >
         </TextView>
-        
-        <!-- EditText 
-            android:id="@+id/etLevel"
-            android:layout_width="match_parent"
-            android:layout_height="86dp"
-            android:text="@string/score"
-            android:textAlignment="center"
-            android:textColor="#000000">
-        </EditText-->
         
         
     </RelativeLayout>
@@ -76,11 +59,5 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal" >
-    </LinearLayout>
 
 </LinearLayout>
