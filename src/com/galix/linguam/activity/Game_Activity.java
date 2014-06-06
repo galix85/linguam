@@ -6,14 +6,13 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Path.FillType;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -184,7 +183,11 @@ public class Game_Activity extends Activity {
 			LinguamApplication.statisticDB.updateScore(scoreToUpdate);
 			//Correct answer
 			Log.v(TAG,getResources().getString(R.string.correct) + "(+"+ currentScore +" points)");
+			
 			Toast correctToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.correct) + "(+"+ currentScore +" points)", Toast.LENGTH_SHORT);
+			View view = correctToast.getView();
+			view.setBackgroundColor(getResources().getColor(R.color.Green));
+			TextView v = (TextView) correctToast.getView().findViewById(android.R.id.message);
 			correctToast.show();
 			
 		}else{
@@ -198,7 +201,11 @@ public class Game_Activity extends Activity {
 				LinguamApplication.statisticDB.updateScore(scoreToUpdate);
 				//Incorrect answer
 				Log.v(TAG,getResources().getString(R.string.incorrect)+ "(-"+ currentScore +" points)");
+				
 				incorrectToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.incorrect)+ "(-"+ currentScore +" points)", Toast.LENGTH_SHORT);
+				View view = incorrectToast.getView();
+				view.setBackgroundColor(getResources().getColor(R.color.Red));
+				TextView v = (TextView) incorrectToast.getView().findViewById(android.R.id.message);
 				incorrectToast.show();
 		}
 		
@@ -215,7 +222,7 @@ public class Game_Activity extends Activity {
 	private void setViewFirstGroup(){
 		
 		
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 70, 2);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 150, 2);
 		params.setMargins(2, 0, 2, 0);
 		
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
@@ -241,7 +248,7 @@ public class Game_Activity extends Activity {
 		btn1.setTextColor(getResources().getColor(R.color.White));
 		btn1.setTextSize(18);
 		btn1.setLayoutParams(params);
-        btn1.setOnClickListener(new OnClickListener() {         
+		btn1.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
 	        		boolean correct = gameEngine.checkAnswer(btn1.getText().toString(), gameIter.getPairWord().getOriginalWord());
@@ -255,7 +262,7 @@ public class Game_Activity extends Activity {
         btn2.setBackgroundResource(R.drawable.buttonshape);
 		btn2.setTextColor(getResources().getColor(R.color.White));
 		btn2.setTextSize(18);
-		btn2.setLayoutParams(params);
+		btn2.setLayoutParams(params);	
         btn2.setOnClickListener(new OnClickListener() {         
 	        @Override
 	        public void onClick(View v) {
@@ -276,7 +283,7 @@ public class Game_Activity extends Activity {
 	 */
 	private void setViewSecondGroup(){
 		
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 70, 2);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 150, 2);
 		params.setMargins(2, 2, 2, 2);
 				
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
@@ -326,7 +333,9 @@ public class Game_Activity extends Activity {
 	        public void onClick(View v) {
 	        	boolean correct = gameEngine.checkAnswer(btn2.getText().toString(), gameIter.getPairWord().getOriginalWord());
         		updateStats(correct,gameIter);
-	            }           
+	            }
+	        
+	        
 	    });
 
         //Set params l2 
@@ -377,7 +386,7 @@ public class Game_Activity extends Activity {
 	 */
 	private void setViewThirdGroup(){
 		
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,150);
 		params.setMargins(2, 2, 2, 2);
 		
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
@@ -401,6 +410,7 @@ public class Game_Activity extends Activity {
 		etCorrectAnswer.setTextColor(getResources().getColor(R.color.Black));
 		etCorrectAnswer.setTextSize(20);
 		etCorrectAnswer.setHint(R.string.text_level5_hint);
+		etCorrectAnswer.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 	
 		
 		final Button btn1 = new Button(this);

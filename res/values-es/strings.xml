@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- General Strings  -->
+    <string name="app_name">Linguam</string>
+    <string name="translate_activity_title">Linguam - Buscar</string>
+    <string name="game_activity_title">Linguam - Juego</string>
+    <string name="action_settings">Opciones</string>
+
+    <!-- Translate Button Strings  -->
+    <string name="tanslate_button">Traducir</string>
+    <string name="translate_word_hint">Escribe una palabra</string>
+    <string name="translate_no_result">No hay resultados</string>
+    <string name="translate_possible_translation">Posibles traducciones:</string>
+    <string name="already_traslated">Ya has buscado esta palabra anteriormente(%s), quieres jugar? :)</string>
+    <string name="translation_saved">Traducción guardada: %1$s(%2$s)</string>
+    
+    <!-- Main Activity icon text -->
+    <string name="ictext_search">Busca tus palabras</string>
+    <string name="ictext_play">Vamos a jugar</string>
+    <string name="no_words">Como mínimo necesitas 10 palabras para jugar</string>
+    
+    <!-- Play Button Strings  -->
+    <string name="playgame_button">Jugar</string>
+    <string name="check_button">Comprobar</string>
+    <string name="text_level5_hint">Escribe tu respuesta</string>
+    <string name="no_more_words">Guau! Eres increible, por favor busca más palabras para continuar jugando</string>
+    <string name="correct">CORRECTO</string>
+    <string name="incorrect">INCORRECTO</string>
+    
+    
+    <!--  Score Strings -->
+	<string name="score">PUNTUACIÓN:</string>
+	<string name="level">NIVEL PALABRA:</string>
+
+</resources>

@@ -164,13 +164,15 @@ public final class R {
     }
     public static final class drawable {
         public static final int buttonshape=0x7f020000;
-        public static final int gradient_bg=0x7f020001;
-        public static final int gradient_bg_hover=0x7f020002;
-        public static final int ic_action_search=0x7f020003;
-        public static final int ic_game_activity=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
-        public static final int ic_translate_activity=0x7f020006;
-        public static final int translate_row_selector=0x7f020007;
+        public static final int correct_toast=0x7f020001;
+        public static final int gradient_bg=0x7f020002;
+        public static final int gradient_bg_hover=0x7f020003;
+        public static final int ic_action_search=0x7f020004;
+        public static final int ic_game_activity=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int ic_translate_activity=0x7f020007;
+        public static final int incorrect_toast=0x7f020008;
+        public static final int translate_row_selector=0x7f020009;
     }
     public static final class id {
         public static final int LinearLayout01=0x7f09000a;
@@ -203,6 +205,7 @@ public final class R {
         public static final int action_settings=0x7f060003;
         public static final int already_traslated=0x7f060008;
         /**  General Strings  
+ General Strings  
          */
         public static final int app_name=0x7f060000;
         public static final int check_button=0x7f06000e;
@@ -210,6 +213,7 @@ public final class R {
         public static final int game_activity_title=0x7f060002;
         public static final int ictext_play=0x7f06000b;
         /**  Main Activity icon text 
+ Main Activity icon text 
          */
         public static final int ictext_search=0x7f06000a;
         public static final int incorrect=0x7f060012;
@@ -217,12 +221,15 @@ public final class R {
         public static final int no_more_words=0x7f060010;
         public static final int no_words=0x7f06000c;
         /**  Play Button Strings  
+ Play Button Strings  
          */
         public static final int playgame_button=0x7f06000d;
         /**   Score Strings 
+  Score Strings 
          */
         public static final int score=0x7f060013;
         /**  Translate Button Strings  
+ Translate Button Strings  
          */
         public static final int tanslate_button=0x7f060004;
         public static final int text_level5_hint=0x7f06000f;

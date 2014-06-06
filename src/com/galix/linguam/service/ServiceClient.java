@@ -45,11 +45,7 @@ public class ServiceClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getClient(Context context, Class<T> clazz) {
-		Log.v(TAG, "getClient without auth");
-		
-		//Gson gson = new GsonBuilder().create();
-		
-		
+
 		if (mRestAdapter == null) {
 			mRestAdapter = new RestAdapter.Builder().setEndpoint(mBaseUrl)//.setLogLevel(RestAdapter.LogLevel.FULL)
 					.setRequestInterceptor(new RequestInterceptor() {
