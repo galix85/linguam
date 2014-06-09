@@ -33,6 +33,7 @@ import com.galix.linguam.pojo.OriginalWord;
 import com.galix.linguam.pojo.Term;
 import com.galix.linguam.pojo.TranslatedWord;
 import com.galix.linguam.service.ServiceClient;
+import com.galix.linguam.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -160,6 +161,8 @@ public class Translate_Activity extends ListActivity {
 	}
 
 	private OriginalWord saveOriginalWord(Term originalWord) {
+	
+		originalWord.setTerm(Util.trimWord(originalWord.getTerm()));
 		OriginalWord newOriginalWord = LinguamApplication.originalWordDB
 				.createOriginalWord(originalWord);
 		return newOriginalWord;
@@ -167,6 +170,7 @@ public class Translate_Activity extends ListActivity {
 
 	private TranslatedWord saveTranslateWord(Term translateWord,
 			Term originalWord) {
+		translateWord.setTerm(Util.trimWord(translateWord.getTerm()));
 		return LinguamApplication.translatedWordDB.createTranslation(
 				translateWord, true, originalWord.getTerm());
 	}
@@ -175,6 +179,7 @@ public class Translate_Activity extends ListActivity {
 			Term originalWord) {
 
 		for (Term term : translateWord) {
+			term.setTerm(Util.trimWord(term.getTerm()));
 			LinguamApplication.translatedWordDB.createTranslation(term, false,
 					originalWord.getTerm());
 		}

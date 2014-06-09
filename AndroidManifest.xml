@@ -41,6 +41,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.galix.linguam.MainActivity" />
         </activity>
+         <uses-library android:name="android.test.runner" />
     </application>
+   
 
 </manifest>

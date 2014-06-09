@@ -187,7 +187,6 @@ public class Game_Activity extends Activity {
 			Toast correctToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.correct) + "(+"+ currentScore +" points)", Toast.LENGTH_SHORT);
 			View view = correctToast.getView();
 			view.setBackgroundColor(getResources().getColor(R.color.Green));
-			TextView v = (TextView) correctToast.getView().findViewById(android.R.id.message);
 			correctToast.show();
 			
 		}else{
@@ -202,10 +201,11 @@ public class Game_Activity extends Activity {
 				//Incorrect answer
 				Log.v(TAG,getResources().getString(R.string.incorrect)+ "(-"+ currentScore +" points)");
 				
-				incorrectToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.incorrect)+ "(-"+ currentScore +" points)", Toast.LENGTH_SHORT);
+				incorrectToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.incorrect)+ "(-"+ currentScore +" points).\n" +
+						getResources().getString(R.string.correct_asnwer) +" "+ gameStat.getPairWord().getTranslateWord().toUpperCase()
+						, Toast.LENGTH_SHORT);
 				View view = incorrectToast.getView();
 				view.setBackgroundColor(getResources().getColor(R.color.Red));
-				TextView v = (TextView) incorrectToast.getView().findViewById(android.R.id.message);
 				incorrectToast.show();
 		}
 		
@@ -283,7 +283,7 @@ public class Game_Activity extends Activity {
 	 */
 	private void setViewSecondGroup(){
 		
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 150, 2);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(150, 170, 2);
 		params.setMargins(2, 2, 2, 2);
 				
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);

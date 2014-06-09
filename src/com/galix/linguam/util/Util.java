@@ -61,4 +61,14 @@ public class Util {
 	    return width;
 		
 	}
+	
+	public static String trimWord(String originalWord) {
+		
+		String[] originalWordArray = originalWord.split(",");
+		if (originalWordArray != null && originalWordArray.length > 0)
+			originalWord = originalWordArray[0];
+			originalWord = originalWord.replaceAll("\\s+$", "");
+		
+		return originalWord;
+	}
 }

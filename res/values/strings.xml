@@ -27,6 +27,7 @@
     <string name="no_more_words">Uau you\'re amazing!! Please search more words to continue playing</string>
     <string name="correct">CORRECT</string>
     <string name="incorrect">INCORRECT</string>
+    <string name="correct_asnwer">CORRECT ANSWER --></string>
     
     
     <!--  Score Strings -->

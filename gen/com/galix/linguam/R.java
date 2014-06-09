@@ -210,6 +210,7 @@ public final class R {
         public static final int app_name=0x7f060000;
         public static final int check_button=0x7f06000e;
         public static final int correct=0x7f060011;
+        public static final int correct_asnwer=0x7f060013;
         public static final int game_activity_title=0x7f060002;
         public static final int ictext_play=0x7f06000b;
         /**  Main Activity icon text 
@@ -217,7 +218,7 @@ public final class R {
          */
         public static final int ictext_search=0x7f06000a;
         public static final int incorrect=0x7f060012;
-        public static final int level=0x7f060014;
+        public static final int level=0x7f060015;
         public static final int no_more_words=0x7f060010;
         public static final int no_words=0x7f06000c;
         /**  Play Button Strings  
@@ -227,7 +228,7 @@ public final class R {
         /**   Score Strings 
   Score Strings 
          */
-        public static final int score=0x7f060013;
+        public static final int score=0x7f060014;
         /**  Translate Button Strings  
  Translate Button Strings  
          */
