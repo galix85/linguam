@@ -251,6 +251,9 @@ public class Translate_Activity extends ListActivity {
 							firstTranslationList.add(item.getFirstTranslation());
 							originalTermList.add(item.getOriginalTerm());
 						}
+						
+						firstTranslationList = Util.removeDuplicates(firstTranslationList);
+						originalTermList = Util.removeDuplicates(originalTermList);
 
 						// Add translate word to hashmap
 						if (firstTranslationList.size() > 0) {

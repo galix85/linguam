@@ -1,5 +1,8 @@
 package com.galix.linguam.pojo;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Term {
 
 	String term;
@@ -45,5 +48,31 @@ public class Term {
 				+ ", usage=" + usage + "]";
 	}
 	
+	public int hashCode() {
+		  // return (POS.hashCode() + sense.hashCode() + term.hashCode() + usage.hashCode());
+		HashCodeBuilder builder = new HashCodeBuilder();
+		builder.append(POS);
+		builder.append(sense);
+		builder.append(term);
+		builder.append(usage);
+		return builder.toHashCode();
+	}
+
+	   public boolean equals(Object obj) {
+		   
+		   /*if (obj == null) return false;
+		   if (obj == this) return true;
+		   if (!(obj instanceof TermWrapper))return false;*/
+		   if (obj instanceof Term) {
+			   Term otherTerm = ((Term)obj);
+		       return new EqualsBuilder().
+		           append(POS, otherTerm.POS).
+		           append(sense, otherTerm.sense).
+		           append(term, otherTerm.term).
+		           append(usage, otherTerm.usage).
+		           isEquals();
+		   }
+		   return false;
+	   }
 }
 

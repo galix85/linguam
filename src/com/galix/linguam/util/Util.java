@@ -1,12 +1,20 @@
 package com.galix.linguam.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
 import android.graphics.Point;
 import java.util.Random;
+
+import com.galix.linguam.pojo.Term;
+import com.galix.linguam.pojo.TermWrapper;
+
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -70,5 +78,14 @@ public class Util {
 			originalWord = originalWord.replaceAll("\\s+$", "");
 		
 		return originalWord;
+	}
+
+	public static List<Term> removeDuplicates(List<Term> originalList) {
+		
+		Set<Term> setItems = new LinkedHashSet<Term>(originalList);
+		originalList.clear();
+		originalList.addAll(setItems);
+		
+		return originalList;
 	}
 }
