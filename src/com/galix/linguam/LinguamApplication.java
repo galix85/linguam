@@ -9,9 +9,14 @@ import com.galix.linguam.db.TranslationDBAdapter;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 
 public class LinguamApplication extends Application {
+	
+	public static final String PREFS_NAME = "PreferencesFile";
+	public static SharedPreferences preferences = null;
+	
 	
 	public static Context appContext;
 	private static LinguamApplication instance = null;
@@ -31,6 +36,9 @@ public class LinguamApplication extends Application {
 		translatedWordDB = new TranslationDBAdapter(appContext);
 		statisticDB = new StatisticDBAdapter(appContext);
 		spanish_locale = new Locale("es", "ES");
+		
+		// Restore preferences
+	    this.preferences = getSharedPreferences(PREFS_NAME, 0);
 	}
 	
 	

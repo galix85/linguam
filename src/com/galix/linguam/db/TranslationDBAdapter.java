@@ -195,7 +195,8 @@ public class TranslationDBAdapter {
     	String[] selectionArgs = {"1","6"};
     	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
     	
-    	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, null);
+    	//Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, "RANDOM() ");
+    	Cursor cursor = database.rawQuery("SELECT * FROM  (SELECT * FROM " + tableName +  " WHERE selected = ? AND level < ? ORDER BY RANDOM()) as PAIR GROUP BY level",selectionArgs);
     	if (cursor.moveToFirst()){
     		  do {
     			  PairWord pair = new PairWord();

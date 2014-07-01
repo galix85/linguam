@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,7 +32,7 @@ import com.galix.linguam.util.Util;
 public class Game_Activity extends Activity {
 	
 	private static final String TAG = "Linguam: Game Activity";
-
+	
 	private InputMethodManager imm;
 	private TextView tvGamingWord;
 	private TextView tvTotalScore;
@@ -47,6 +48,7 @@ public class Game_Activity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		//Input Method Manager
 		this.imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+		
 		// Get the message from the intent
 		getIntent();
 
