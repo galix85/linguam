@@ -3,6 +3,7 @@ package com.galix.linguam;
 
 import java.util.Locale;
 
+import com.galix.linguam.db.LanguageDBAdapter;
 import com.galix.linguam.db.OriginalWordDBAdapter;
 import com.galix.linguam.db.StatisticDBAdapter;
 import com.galix.linguam.db.TranslationDBAdapter;
@@ -23,6 +24,7 @@ public class LinguamApplication extends Application {
 	public static OriginalWordDBAdapter originalWordDB = null;
 	public static TranslationDBAdapter translatedWordDB = null;
 	public static StatisticDBAdapter statisticDB = null;
+	public static LanguageDBAdapter languageDB = null;
 	public static Locale spanish_locale;
 	
 	public static final int CONSTANT_SCORE = 10;
@@ -35,6 +37,7 @@ public class LinguamApplication extends Application {
 		originalWordDB = new OriginalWordDBAdapter(appContext);
 		translatedWordDB = new TranslationDBAdapter(appContext);
 		statisticDB = new StatisticDBAdapter(appContext);
+		languageDB = new LanguageDBAdapter(appContext);
 		spanish_locale = new Locale("es", "ES");
 		
 		// Restore preferences

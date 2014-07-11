@@ -13,8 +13,8 @@ import com.google.gson.JsonObject;
 	 */
 	public interface WordReferenceClient {
 			
-		    @GET("/{word}")
-			void translate(@Path("word") String word, Callback<JsonObject> callback);
+		    @GET("/{lang}/{word}")
+			void translate(@Path("lang") String lang,@Path("word") String word, Callback<JsonObject> callback);
  
 	}
 

@@ -6,14 +6,12 @@ import java.util.ArrayList;
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.pojo.GameData;
 import com.galix.linguam.pojo.PairWord;
-import com.galix.linguam.pojo.Preferences;
 import com.galix.linguam.pojo.TranslatedWord;
 
 public class GameEngine {
 
 	private static GameEngine instance = null;
 	private static ArrayList<GameData> gameDataList;
-	private static Preferences pref = null;
 	
 	public void init(){
 		// Restore preferences

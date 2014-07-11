@@ -11,24 +11,36 @@ import java.util.Map;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import android.app.ListActivity;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
 import com.galix.linguam.RESTinterface.WordReferenceClient;
+import com.galix.linguam.adapter.DrawableAdapter;
 import com.galix.linguam.adapter.TermAdapter;
 import com.galix.linguam.pojo.Item;
+import com.galix.linguam.pojo.Language;
 import com.galix.linguam.pojo.OriginalWord;
 import com.galix.linguam.pojo.Term;
 import com.galix.linguam.pojo.TranslatedWord;
@@ -39,7 +51,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-public class Translate_Activity extends ListActivity {
+public class Translate_Activity extends ListActivity implements OnItemSelectedListener {
 
 	private static final String TAG = "Linguam: Translate Activity";
 	private WordReferenceClient wordReferenceClient;
@@ -49,9 +61,97 @@ public class Translate_Activity extends ListActivity {
 
 	private ImageButton ib_searchButton;
 	private ListView lv;
+	private Spinner spinner;
 	private InputMethodManager imm;
 	ArrayList<Term> translateList;
+	
+	private String langFrom = null;
+	private String langTo = null;
+	
+	private List<Language> drawerListViewLang;
+    private DrawerLayout drawerLayout;
+    private ListView drawerListView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawableAdapter adapter;
+	
 
+	/**
+	 * @return the langFrom
+	 */
+	public String getLangFrom() {
+		return langFrom;
+	}
+
+	/**
+	 * @param langFrom the langFrom to set
+	 */
+	public void setLangFrom(String langFrom) {
+		this.langFrom = langFrom;
+	}
+
+	/**
+	 * @return the langTo
+	 */
+	public String getLangTo() {
+		return langTo;
+	}
+
+	/**
+	 * @param langTo the langTo to set
+	 */
+	public void setLangTo(String langTo) {
+		this.langTo = langTo;
+	}
+	
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+	    @Override
+	    public void onItemClick(AdapterView parent, View view, int position, long id) {
+	    	
+	    	Language select_language = drawerListViewLang.get(position);
+	    	LinguamApplication.languageDB.setSelectedLanguage(select_language.getId());
+	    
+	    	Toast.makeText(LinguamApplication.getContext(),"Select language: "+ select_language.getTitle(), Toast.LENGTH_LONG).show();
+	    	drawerLayout.closeDrawer(drawerListView);
+
+	    }
+	}
+
+	
+	
+	@Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+         actionBarDrawerToggle.syncState();
+    }
+
+	@Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return super.onCreateOptionsMenu(menu);
+    }
+
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		 // call ActionBarDrawerToggle.onOptionsItemSelected(), if it returns true
+        // then it has handled the app icon touch event
+
+		if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+		return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Input Method Manager
@@ -63,10 +163,44 @@ public class Translate_Activity extends ListActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.translate_layout);
+		
+		// get list items from db
+		drawerListViewLang = LinguamApplication.languageDB.getActiveLanguage();
+		// get ListView defined in activity_main.xml
+		drawerListView = (ListView) findViewById(R.id.left_drawer);
+       
+		adapter = new DrawableAdapter(LinguamApplication.getContext(), drawerListViewLang);
+		
+		 // Set the adapter for the list view
+		drawerListView.setAdapter(adapter);
+
+		// 2. App Icon 
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		// 2.1 create ActionBarDrawerToggle
+		actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                drawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+                );
+
+        // 2.2 Set actionBarDrawerToggle as the DrawerListener
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        
+        // 2.3 enable and show "up" arrow
+        getActionBar().setDisplayHomeAsUpEnabled(true); 
+        
+        // just styling option
+		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		
+		drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
 		// Client object with actions interface of beach.
 		wordReferenceClient = ServiceClient.getInstance().getClient(this,
 				WordReferenceClient.class);
+		
 
 		// Init UI
 		this.translateList = new ArrayList<Term>();
@@ -74,10 +208,19 @@ public class Translate_Activity extends ListActivity {
 		this.tvTitleTerm = (TextView) (findViewById(R.id.tvTitleTerm));
 		this.etTranslateCaption = (EditText) (findViewById(R.id.search));
 		this.ib_searchButton = (ImageButton) findViewById(R.id.translate);
+		this.spinner = (Spinner) findViewById(R.id.spinner);
+
+		// Spinner click listener
+        spinner.setOnItemSelectedListener((OnItemSelectedListener) this);
+ 
+        // Loading spinner data from database
+        loadSpinnerData();
 
 		ib_searchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
+				
 				String word_to_translate;
+				
 				try {
 
 					word_to_translate = URLEncoder.encode(etTranslateCaption
@@ -191,7 +334,7 @@ public class Translate_Activity extends ListActivity {
 	 */
 	private void getTranslation(String word) {
 
-		wordReferenceClient.translate(word, new Callback<JsonObject>() {
+		wordReferenceClient.translate(langFrom+langTo,word, new Callback<JsonObject>() {
 
 			@Override
 			public void failure(RetrofitError err) {
@@ -288,5 +431,45 @@ public class Translate_Activity extends ListActivity {
 		});
 
 	}
+	
+	/**
+     * Function to load the spinner data from SQLite database
+     * */
+    private void loadSpinnerData() {
+   
+    	// Spinner Drop down elements
+        List<Language> languages = LinguamApplication.languageDB.getActiveLanguage();
+ 
+        // Creating adapter for spinner
+        ArrayAdapter<Language> dataAdapter = new ArrayAdapter<Language>(this,
+                android.R.layout.simple_spinner_item, languages);
+ 
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+ 
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+    }
+ 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position,
+            long id) {
+
+    	Language language = (Language)parent.getItemAtPosition(position);
+        
+        //Set langs
+        setLangFrom(language.getLangFrom());
+        setLangTo(language.getLangTo());
+       
+        // Showing selected spinner item
+        Log.v(TAG ,"Lang to translate: " + language.getLangFrom() + " to " + language.getLangTo());
+ 
+    }
+ 
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
+ 
+    }
 
 }

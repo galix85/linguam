@@ -2,30 +2,43 @@ package com.galix.linguam.activity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
+
+import com.galix.linguam.adapter.DrawableAdapter;
 import com.galix.linguam.gameengine.GameEngine;
 import com.galix.linguam.pojo.GameData;
+import com.galix.linguam.pojo.Language;
 import com.galix.linguam.pojo.Term;
 import com.galix.linguam.util.Util;
 
@@ -44,6 +57,54 @@ public class Game_Activity extends Activity {
 	int totalScore;
 	ArrayList<Term> translateList;
 	
+	private List<Language> drawerListViewLang;
+    private DrawerLayout drawerLayout;
+    private ListView drawerListView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawableAdapter adapter;
+	
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+	    @Override
+	    public void onItemClick(AdapterView parent, View view, int position, long id) {
+	    	
+	    	Language select_language = drawerListViewLang.get(position);
+	    	LinguamApplication.languageDB.setSelectedLanguage(select_language.getId());
+	    
+	    	//Change Title
+	    	getActionBar().setTitle("Playing: " + select_language.getTitle()); 
+	    	
+	    	Toast.makeText(LinguamApplication.getContext(),"Select language: "+ select_language.getTitle(), Toast.LENGTH_LONG).show();
+	    	drawerLayout.closeDrawer(drawerListView);
+
+	    }
+	}
+
+	
+	@Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+         actionBarDrawerToggle.syncState();
+    }
+
+	@Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		 // call ActionBarDrawerToggle.onOptionsItemSelected(), if it returns true
+        // then it has handled the app icon touch event
+
+		if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+		return super.onOptionsItemSelected(item);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Input Method Manager
@@ -55,16 +116,58 @@ public class Game_Activity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_layout);
 		
+		// get list items from db
+		drawerListViewLang = LinguamApplication.languageDB.getActiveLanguage();
+		// get ListView defined in activity_main.xml
+		drawerListView = (ListView) findViewById(R.id.left_drawer);
+       
+		adapter = new DrawableAdapter(LinguamApplication.getContext(), drawerListViewLang);
+		
+		 // Set the adapter for the list view
+		drawerListView.setAdapter(adapter);
+
+		// 2. App Icon 
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		// 2.1 create ActionBarDrawerToggle
+		actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                drawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+                );
+
+        // 2.2 Set actionBarDrawerToggle as the DrawerListener
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        
+        // 2.3 enable and show "up" arrow
+        getActionBar().setDisplayHomeAsUpEnabled(true); 
+        
+        // just styling option
+		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		
+		drawerListView.setOnItemClickListener(new DrawerItemClickListener());
+		
 		// Init UI
 		this.tvGamingWord = (TextView)findViewById(R.id.tvGamingWord);
 		this.tvTotalScore = (TextView)findViewById(R.id.tvScore);
 		this.tvWordLevel = (TextView)findViewById(R.id.tvLevel);
+		
 		
 		//init game
 		initGame();
 		//Start game
 		startGame();
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+	    // Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return super.onCreateOptionsMenu(menu);
+    }
 	
 	private void initGame(){
 		//Get instance of game engine 
@@ -227,6 +330,8 @@ public class Game_Activity extends Activity {
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 150, 2);
 		params.setMargins(2, 0, 2, 0);
 		
+		DrawerLayout dl = (DrawerLayout)findViewById(R.id.drawer_layout);
+		
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
 		
 		//Reset view
@@ -277,7 +382,7 @@ public class Game_Activity extends Activity {
         l1.addView(btn1);
         l1.addView(btn2);
         lp.addView(l1);
-        setContentView(lp);
+        setContentView(dl);
 	}
 	
 	/**
@@ -288,6 +393,7 @@ public class Game_Activity extends Activity {
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(150, 170, 2);
 		params.setMargins(2, 2, 2, 2);
 				
+		DrawerLayout dl = (DrawerLayout)findViewById(R.id.drawer_layout);
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
 		
 		LinearLayout l1 = new LinearLayout(this);
@@ -381,7 +487,7 @@ public class Game_Activity extends Activity {
         l2.addView(btn4);
         lp.addView(l1);
         lp.addView(l2);
-        setContentView(lp);
+        setContentView(dl);
 	}
 	/**
 	 * Build 3rth level view 
@@ -391,6 +497,7 @@ public class Game_Activity extends Activity {
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,150);
 		params.setMargins(2, 2, 2, 2);
 		
+		DrawerLayout dl = (DrawerLayout)findViewById(R.id.drawer_layout);
 		LinearLayout lp = (LinearLayout)findViewById(R.id.LinearLayout1);
 		
 		//Reset view
@@ -436,7 +543,7 @@ public class Game_Activity extends Activity {
         l3.addView(etCorrectAnswer);
         l3.addView(btn1);
         lp.addView(l3);
-        setContentView(lp);
+        setContentView(dl);
 
 	}
 

@@ -5,7 +5,7 @@
     <string name="app_name">Linguam</string>
     <string name="translate_activity_title">Linguam - Translate</string>
     <string name="game_activity_title">Linguam - Game</string>
-    <string name="action_settings">Settings</string>
+    <string name="menu_settings">Settings</string>
 
     <!-- Translate Button Strings  -->
     <string name="tanslate_button">Translate</string>
@@ -28,10 +28,14 @@
     <string name="correct">CORRECT</string>
     <string name="incorrect">INCORRECT</string>
     <string name="correct_asnwer">CORRECT ANSWER --></string>
-    
-    
+        
     <!--  Score Strings -->
 	<string name="score">TOTAL SCORE:</string>
 	<string name="level">WORD LEVEL:</string>
+	
+	<!--  Drawable Menu -->
+	<string name="select_language">Select language to play</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>

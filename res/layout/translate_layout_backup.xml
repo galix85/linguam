@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/translate_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    tools:context=".Translate_Activity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="330dp"
+            android:layout_height="48dp"
+            android:layout_weight="0.71"
+            android:hint="@string/translate_word_hint"
+            android:inputType="text" >
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/translate"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:contentDescription="@string/translate_word_hint"
+            android:onClick="translate"
+            android:src="@drawable/ic_action_search" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+		<Spinner  
+	        android:id="@+id/spinner"
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="20dip"/> 
+        
+        <TextView
+            android:id="@+id/tvTitleTerm"
+            android:layout_width="fill_parent"
+            android:layout_height="36dp"
+            android:divider="#b5b5b5"
+            android:dividerHeight="1dp"
+            android:text="@string/translate_possible_translation"
+            android:textColor="#040404"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            android:visibility="invisible"
+            android:layout_marginLeft="10dip" >
+        </TextView>
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:divider="#b5b5b5"
+            android:dividerHeight="1dp"
+            android:layout_marginLeft="10dip" />
+    </LinearLayout>
+
+</LinearLayout>
