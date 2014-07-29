@@ -33,7 +33,7 @@ public class OriginalWordDBAdapter {
 	
 	}
 
-	public OriginalWord createOriginalWord(Term originalWord) {
+	public OriginalWord createOriginalWord(Term originalWord,int refLang) {
 
 		ContentValues values = new ContentValues();
 
@@ -45,6 +45,7 @@ public class OriginalWordDBAdapter {
 				originalWord.getTerm());
 		values.put(MySQLiteHelper.COLUMN_ORIGINALWORD_USAGE,
 				originalWord.getUsage() == null ? "Empty Usage" : originalWord.getUsage());
+		values.put(MySQLiteHelper.COLUMN_STATISTICS_REF_LANG,refLang);
 		//
 		if (!exist(originalWord.getTerm(),originalWord.getPOS(),originalWord.getSense())){
 			
@@ -76,12 +77,16 @@ public class OriginalWordDBAdapter {
 	
 	}
 
-	public List<OriginalWord> getAllOriginalWords() {
+	//TODO: Add param del lang
+	public List<OriginalWord> getAllOriginalWords(int refLang) {
 		
 		List<OriginalWord> originalWords = new ArrayList<OriginalWord>();
-
+    	
+		String selection = MySQLiteHelper.COLUMN_ORIGINALWORD_REF_LANG+"=?";
+    	String[] selectionArgs = {String.valueOf(refLang)};
+				
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_ORIGINALWORD,
-				allColumns, null, null, null, null, null);
+				allColumns, selection, selectionArgs, null, null, null);
 
 		cursor.moveToFirst();
 		
@@ -126,13 +131,13 @@ public class OriginalWordDBAdapter {
 
 	}
 		
-	
-	public List<OriginalWord> getWordByLevel(int level,int limit) {
+	//TODO: Add param del lang
+	public List<OriginalWord> getWordByLevel(int level,int limit,int refLang) {
 	    
 		List<OriginalWord> originalWords = new ArrayList<OriginalWord>();
 
-		//String selection = "level=?";
-    	//String[] selectionArgs = {level};
+		/*String selection = MySQLiteHelper.COLUMN_ORIGINALWORD_REF_LANG+"=?";
+    	String[] selectionArgs = {String.valueOf(refLang)};*/
 		
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_ORIGINALWORD,
 				allColumns, null, null, null, null, String.valueOf(limit));

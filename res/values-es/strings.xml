@@ -14,6 +14,7 @@
     <string name="translate_possible_translation">Posibles traducciones:</string>
     <string name="already_traslated">Ya has buscado esta palabra anteriormente(%s), quieres jugar? :)</string>
     <string name="translation_saved">Traducción guardada: %1$s(%2$s)</string>
+    <string name="no_internet_connection">No hay conexión a internet</string>
     
     <!-- Main Activity icon text -->
     <string name="ictext_search">Busca tus palabras</string>
@@ -27,10 +28,22 @@
     <string name="no_more_words">Guau! Eres increible, por favor busca más palabras para continuar jugando</string>
     <string name="correct">CORRECTO</string>
     <string name="incorrect">INCORRECTO</string>
-    
+    <string name="correct_asnwer">OPCIÓN CORRECTA --></string>
     
     <!--  Score Strings -->
 	<string name="score">PUNTUACIÓN:</string>
 	<string name="level">NIVEL PALABRA:</string>
+	
+	<!--  Drawable Menu & Action Bar Title -->
+	<string name="select_language">Selecciona idioma para jugar</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    
+    <!--  Language Mapping -->
+    <string name="es">Vocab. Español</string>
+    <string name="fr">Vocab. Francés</string>
+    <string name="it">Vocab. Italiano</string>
+    <string name="en">Vocab. Inglés</string>
+    <string name="pt">Vocab. Portugués</string>
 
 </resources>

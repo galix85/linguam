@@ -63,7 +63,11 @@ public final class R {
         public static final int Goldenrod=0x7f040039;
         public static final int Gray=0x7f04005d;
         public static final int Green=0x7f040085;
+        public static final int GreenKuler=0x7f04008c;
         public static final int GreenYellow=0x7f04004b;
+        public static final int GreyKuler=0x7f04008e;
+        public static final int GreySelected=0x7f040091;
+        public static final int GreySoft=0x7f040090;
         public static final int Honeydew=0x7f04002b;
         public static final int HotPink=0x7f040018;
         public static final int IndianRed=0x7f040040;
@@ -125,6 +129,7 @@ public final class R {
         public static final int PowderBlue=0x7f040048;
         public static final int Purple=0x7f04005f;
         public static final int Red=0x7f04001e;
+        public static final int RedKuler=0x7f04008d;
         public static final int RosyBrown=0x7f040044;
         public static final int RoyalBlue=0x7f040072;
         public static final int SaddleBrown=0x7f040057;
@@ -148,6 +153,7 @@ public final class R {
         public static final int Violet=0x7f040030;
         public static final int Wheat=0x7f040028;
         public static final int White=0x7f040000;
+        public static final int WhiteKuler=0x7f04008f;
         public static final int WhiteSmoke=0x7f040026;
         public static final int Yellow=0x7f040003;
         public static final int YellowGreen=0x7f040050;
@@ -163,98 +169,136 @@ public final class R {
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int buttonshape=0x7f020000;
-        public static final int correct_toast=0x7f020001;
-        public static final int drawer_shadow=0x7f020002;
-        public static final int gradient_bg=0x7f020003;
-        public static final int gradient_bg_hover=0x7f020004;
-        public static final int ic_action_search=0x7f020005;
-        public static final int ic_drawer=0x7f020006;
-        public static final int ic_game_activity=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int ic_translate_activity=0x7f020009;
-        public static final int incorrect_toast=0x7f02000a;
-        public static final int translate_row_selector=0x7f02000b;
+        public static final int button_state_selector=0x7f020000;
+        public static final int button_top_sel=0x7f020001;
+        public static final int button_top_unsel=0x7f020002;
+        public static final int buttonshape=0x7f020003;
+        public static final int correct_toast=0x7f020004;
+        public static final int drawer_shadow=0x7f020005;
+        public static final int gradient_bg=0x7f020006;
+        public static final int gradient_bg_hover=0x7f020007;
+        public static final int ic_action_search=0x7f020008;
+        public static final int ic_drawer=0x7f020009;
+        public static final int ic_game_activity=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int ic_translate_activity=0x7f02000c;
+        public static final int incorrect_toast=0x7f02000d;
+        public static final int translate_row_selector=0x7f02000e;
+        public static final int vertical_divider=0x7f02000f;
     }
     public static final class id {
         public static final int LinearLayout01=0x7f090003;
-        public static final int LinearLayout02=0x7f090012;
-        public static final int LinearLayout1=0x7f090006;
-        public static final int action_settings=0x7f090014;
-        public static final int btn_play_activity=0x7f09000a;
-        public static final int btn_translate_activity=0x7f09000b;
+        public static final int LinearLayout02=0x7f090023;
+        public static final int LinearLayout1=0x7f09000d;
+        public static final int LinearLayout_global=0x7f090006;
+        public static final int LinearLayout_top=0x7f090007;
+        public static final int action_settings=0x7f090025;
+        public static final int all_in=0x7f09001c;
+        public static final int btn_level1_top=0x7f090008;
+        public static final int btn_level2_top=0x7f090009;
+        public static final int btn_level3_top=0x7f09000a;
+        public static final int btn_level4_top=0x7f09000b;
+        public static final int btn_level5_top=0x7f09000c;
+        public static final int btn_play_activity=0x7f090011;
+        public static final int btn_translate_activity=0x7f090012;
         public static final int content_frame=0x7f090001;
         public static final int drawer_layout=0x7f090000;
         public static final int left_drawer=0x7f090002;
-        public static final int menu_settings=0x7f090015;
-        public static final int search=0x7f09000d;
-        public static final int spinner=0x7f09000f;
-        public static final int translate=0x7f09000e;
-        public static final int translate_main_layout=0x7f09000c;
-        public static final int tvGamingWord=0x7f090009;
+        public static final int level1=0x7f090015;
+        public static final int level2=0x7f090016;
+        public static final int level3=0x7f090018;
+        public static final int level4=0x7f090019;
+        public static final int level5=0x7f09001b;
+        public static final int linearLayout1=0x7f090014;
+        public static final int linearLayout2=0x7f090017;
+        public static final int linearLayout3=0x7f09001a;
+        public static final int linearLayout_all=0x7f090013;
+        public static final int menu_settings=0x7f090026;
+        public static final int search=0x7f09001e;
+        public static final int spinner=0x7f090020;
+        public static final int translate=0x7f09001f;
+        public static final int translate_main_layout=0x7f09001d;
+        public static final int tvGamingWord=0x7f090010;
         public static final int tvLanguageSubtitle=0x7f090005;
         public static final int tvLanguageTitle=0x7f090004;
-        public static final int tvLevel=0x7f090008;
-        public static final int tvScore=0x7f090007;
-        public static final int tvTerm=0x7f090011;
-        public static final int tvTitleTerm=0x7f090010;
-        public static final int tvType=0x7f090013;
+        public static final int tvLevel=0x7f09000f;
+        public static final int tvScore=0x7f09000e;
+        public static final int tvTerm=0x7f090022;
+        public static final int tvTitleTerm=0x7f090021;
+        public static final int tvType=0x7f090024;
     }
     public static final class layout {
         public static final int drawer_layout=0x7f030000;
         public static final int drawer_listview_item=0x7f030001;
-        public static final int drawer_listview_item_old=0x7f030002;
-        public static final int game_layout=0x7f030003;
-        public static final int game_layout_backup=0x7f030004;
-        public static final int main_layout=0x7f030005;
-        public static final int main_layout_bckup=0x7f030006;
+        public static final int game_layout=0x7f030002;
+        public static final int game_layout_copy=0x7f030003;
+        public static final int main_layout=0x7f030004;
+        public static final int main_layout_bckup=0x7f030005;
+        public static final int play_level_layout=0x7f030006;
         public static final int translate_layout=0x7f030007;
-        public static final int translate_layout_backup=0x7f030008;
-        public static final int translate_row=0x7f030009;
+        public static final int translate_row=0x7f030008;
     }
     public static final class menu {
         public static final int display_message=0x7f080000;
         public static final int main=0x7f080001;
     }
     public static final class string {
-        public static final int action_settings=0x7f060019;
+        public static final int action_settings=0x7f060025;
+        public static final int all_together=0x7f06001f;
         public static final int already_traslated=0x7f060008;
         /**  General Strings  
  General Strings  
          */
         public static final int app_name=0x7f060000;
-        public static final int check_button=0x7f06000e;
-        public static final int correct=0x7f060011;
-        public static final int correct_asnwer=0x7f060013;
-        public static final int drawer_close=0x7f060018;
-        public static final int drawer_open=0x7f060017;
+        public static final int check_button=0x7f06000f;
+        public static final int correct=0x7f060012;
+        public static final int correct_asnwer=0x7f060014;
+        public static final int drawer_close=0x7f060019;
+        public static final int drawer_open=0x7f060018;
+        public static final int en=0x7f060023;
+        /**   Language Mapping 
+  Language Mapping 
+         */
+        public static final int es=0x7f060020;
+        public static final int fr=0x7f060021;
         public static final int game_activity_title=0x7f060002;
-        public static final int ictext_play=0x7f06000b;
+        public static final int ictext_play=0x7f06000c;
         /**  Main Activity icon text 
  Main Activity icon text 
          */
-        public static final int ictext_search=0x7f06000a;
-        public static final int incorrect=0x7f060012;
-        public static final int level=0x7f060015;
+        public static final int ictext_search=0x7f06000b;
+        public static final int incorrect=0x7f060013;
+        public static final int it=0x7f060022;
+        public static final int level=0x7f060016;
+        /**   Levels 
+         */
+        public static final int level1=0x7f06001a;
+        public static final int level2=0x7f06001b;
+        public static final int level3=0x7f06001c;
+        public static final int level4=0x7f06001d;
+        public static final int level5=0x7f06001e;
         public static final int menu_settings=0x7f060003;
-        public static final int no_more_words=0x7f060010;
-        public static final int no_words=0x7f06000c;
+        public static final int no_internet_connection=0x7f06000a;
+        public static final int no_more_words=0x7f060011;
+        public static final int no_words=0x7f06000d;
         /**  Play Button Strings  
  Play Button Strings  
          */
-        public static final int playgame_button=0x7f06000d;
+        public static final int playgame_button=0x7f06000e;
+        public static final int pt=0x7f060024;
         /**   Score Strings 
   Score Strings 
          */
-        public static final int score=0x7f060014;
-        /**   Drawable Menu 
+        public static final int score=0x7f060015;
+        /**   Drawable Menu & Action Bar Title 
+  Drawable Menu & Action Bar Title 
          */
-        public static final int select_language=0x7f060016;
+        public static final int select_language=0x7f060017;
         /**  Translate Button Strings  
  Translate Button Strings  
          */
         public static final int tanslate_button=0x7f060004;
-        public static final int text_level5_hint=0x7f06000f;
+        public static final int text_level5_hint=0x7f060010;
         public static final int translate_activity_title=0x7f060001;
         public static final int translate_no_result=0x7f060006;
         public static final int translate_possible_translation=0x7f060007;

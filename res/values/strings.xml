@@ -14,7 +14,8 @@
     <string name="translate_possible_translation">Possible Translations:</string>
     <string name="already_traslated">You already looked for this word(%s), let\'s play? :)</string>
     <string name="translation_saved">Translation saved: %1$s(%2$s)</string>
-    
+    <string name="no_internet_connection">No internet connection</string>
+        
     <!-- Main Activity icon text -->
     <string name="ictext_search">Find your word!</string>
     <string name="ictext_play">Let\'s play!</string>
@@ -33,9 +34,25 @@
 	<string name="score">TOTAL SCORE:</string>
 	<string name="level">WORD LEVEL:</string>
 	
-	<!--  Drawable Menu -->
+	<!--  Drawable Menu & Action Bar Title -->
 	<string name="select_language">Select language to play</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    
+    <!--  Levels -->
+    <string name="level1">Level1</string>
+    <string name="level2">Level2</string>
+    <string name="level3">Level3</string>
+    <string name="level4">Level4</string>
+    <string name="level5">Level5</string>
+    <string name="all_together">All Together</string>
+    
+    <!--  Language Mapping -->
+    <string name="es">Spanish vocab</string>
+    <string name="fr">French vocab</string>
+    <string name="it">Italian vocab</string>
+    <string name="en">English vocab</string>
+    <string name="pt">Portuguese vocab</string>
+    
 
 </resources>

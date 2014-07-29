@@ -95,12 +95,12 @@ private static final String TAG = "Linguam: LanguageDBAdapter";
 		database.update(MySQLiteHelper.TABLE_LANGUAGE, values, selection, selectionArgs);
 	}
 	
-	public void setSelectedLanguage(String id) {
+	public void setSelectedLanguage(int id) {
 		
 		ContentValues values = new ContentValues();
 		
     	String selection_noSelected = "_id<>?";
-    	String[] selectionArgs_noSelected = {id};
+    	String[] selectionArgs_noSelected = {String.valueOf(id)};
     	
     	//Set to false old selected language
     	values.put(MySQLiteHelper.COLUMN_LANGUAGE_SELECTED, "0");
@@ -108,7 +108,7 @@ private static final String TAG = "Linguam: LanguageDBAdapter";
 		
 		// Set new selected language
 		String selection = "_id=?";
-    	String[] selectionArgs = {id};
+    	String[] selectionArgs = {String.valueOf(id)};
 
 		values.put(MySQLiteHelper.COLUMN_LANGUAGE_SELECTED, "1");
 		database.update(MySQLiteHelper.TABLE_LANGUAGE, values, selection, selectionArgs);
@@ -124,11 +124,13 @@ private static final String TAG = "Linguam: LanguageDBAdapter";
     	Cursor cursor = database.query(MySQLiteHelper.TABLE_LANGUAGE, null, selection, selectionArgs, null, null, null);
     	if (cursor != null && cursor.getCount() > 0){
     		cursor.moveToFirst();
-    		language.setId(cursor.getString(1));
+    		language.setId(Integer.parseInt(cursor.getString(0)));
 	    	language.setLangFrom(cursor.getString(1));
 	    	language.setLangTo(cursor.getString(2));
-	    	language.setTitle(cursor.getString(4));
-	    	language.setSubtitle(cursor.getString(5));
+	    	language.setTitle(cursor.getString(3));
+	    	language.setSubtitle(cursor.getString(4));
+	    	language.setIsSelected(cursor.getString(6));
+	    	language.setIsActive(cursor.getString(7));
 			//Log.v(TAG, "Getting current score: " + score);
 	    	// make sure to close the cursor
 			cursor.close();
@@ -142,7 +144,7 @@ private static final String TAG = "Linguam: LanguageDBAdapter";
 	private Language cursorToLanguage(Cursor cursor) {
 		
 		Language language = new Language();
-		language.setId(cursor.getString(0)); //Id
+		language.setId(Integer.parseInt(cursor.getString(0))); //Id
 		language.setLangFrom(cursor.getString(1)); //From
 		language.setLangTo(cursor.getString(2)); //To
 		language.setTitle(cursor.getString(3)); //Title

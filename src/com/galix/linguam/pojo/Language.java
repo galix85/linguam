@@ -2,7 +2,7 @@ package com.galix.linguam.pojo;
 
 public class Language {
 
-	private String languageId;
+	private int languageId;
 	private String langFrom;
 	private String langTo;
 	private String isActive;
@@ -90,10 +90,10 @@ public class Language {
 		this.subtitle = subtitle;
 	}
 	
-	public String getId() {
+	public int getId() {
 		return languageId;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.languageId = id;
 	}
 	

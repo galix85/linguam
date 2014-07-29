@@ -40,7 +40,7 @@ public class GameEngine {
 		}*/
 		//get pair
 		ArrayList<GameData> gameDataList = new ArrayList<GameData>();
-		ArrayList<PairWord> allTranslateWordList = LinguamApplication.translatedWordDB.getPairWord();
+		ArrayList<PairWord> allTranslateWordList = LinguamApplication.translatedWordDB.getPairWord(LinguamApplication.getSelectedLanguage().getId());
 		if (allTranslateWordList != null && allTranslateWordList.size() > 0){
 			for (PairWord pairWord : allTranslateWordList) {
 				//fill padding words
@@ -51,7 +51,7 @@ public class GameEngine {
 					nWords = 3;
 				}
 				
-				ArrayList<String> paddingWords = LinguamApplication.translatedWordDB.getPaddingWordList(pairWord.getOriginalWord(), nWords);
+				ArrayList<String> paddingWords = LinguamApplication.translatedWordDB.getPaddingWordList(pairWord.getOriginalWord(), nWords,LinguamApplication.getSelectedLanguage().getId());
 	
 				//Set info to GameData object
 				GameData gameData = new GameData();

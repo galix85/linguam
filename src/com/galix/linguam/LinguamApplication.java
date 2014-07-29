@@ -7,6 +7,8 @@ import com.galix.linguam.db.LanguageDBAdapter;
 import com.galix.linguam.db.OriginalWordDBAdapter;
 import com.galix.linguam.db.StatisticDBAdapter;
 import com.galix.linguam.db.TranslationDBAdapter;
+import com.galix.linguam.pojo.Language;
+import com.galix.linguam.util.Util;
 
 import android.app.Application;
 import android.content.Context;
@@ -26,6 +28,7 @@ public class LinguamApplication extends Application {
 	public static StatisticDBAdapter statisticDB = null;
 	public static LanguageDBAdapter languageDB = null;
 	public static Locale spanish_locale;
+	public static Language selectedLanguage = null;
 	
 	public static final int CONSTANT_SCORE = 10;
 	
@@ -39,6 +42,9 @@ public class LinguamApplication extends Application {
 		statisticDB = new StatisticDBAdapter(appContext);
 		languageDB = new LanguageDBAdapter(appContext);
 		spanish_locale = new Locale("es", "ES");
+		
+		//get default language
+		setSelectedLanguage(Util.getSelectedLanguage());
 		
 		// Restore preferences
 	    this.preferences = getSharedPreferences(PREFS_NAME, 0);
@@ -62,5 +68,12 @@ public class LinguamApplication extends Application {
 	    return appContext;
 	}
 
+	public static void setSelectedLanguage(Language language){
+		selectedLanguage = language;
+	}
+		
+	public static Language getSelectedLanguage(){
+		return selectedLanguage;
+	}
 }
 

@@ -1,13 +1,13 @@
 package com.galix.linguam.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -18,10 +18,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -34,7 +32,6 @@ import android.widget.Toast;
 
 import com.galix.linguam.LinguamApplication;
 import com.galix.linguam.R;
-
 import com.galix.linguam.adapter.DrawableAdapter;
 import com.galix.linguam.gameengine.GameEngine;
 import com.galix.linguam.pojo.GameData;
@@ -62,24 +59,45 @@ public class Game_Activity extends Activity {
     private ListView drawerListView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawableAdapter adapter;
+    
+    //Top buttons
+	private Button btn_top1;
+	private Button btn_top2;
+	private Button btn_top3;
+	private Button btn_top4;
+	private Button btn_top5;
+	
+	private HashMap<Integer, Integer> levelButtonMapping;
+
+	private int level;
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 	    @Override
-	    public void onItemClick(AdapterView parent, View view, int position, long id) {
+	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+	    	InputMethodManager imm = (InputMethodManager)getSystemService(LinguamApplication.getContext().INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	    	
 	    	Language select_language = drawerListViewLang.get(position);
 	    	LinguamApplication.languageDB.setSelectedLanguage(select_language.getId());
-	    
-	    	//Change Title
-	    	getActionBar().setTitle("Playing: " + select_language.getTitle()); 
+	    	LinguamApplication.setSelectedLanguage(select_language);
 	    	
-	    	Toast.makeText(LinguamApplication.getContext(),"Select language: "+ select_language.getTitle(), Toast.LENGTH_LONG).show();
+	    	//Change Title
+	    	android.app.ActionBar ab = getActionBar();
+		    ab.setTitle(Util.getActionBarTitle());
+		    ab.setSubtitle(Util.getSelectedLanguage().getSubtitle()); 
+		    
+		    //Delete current UI
+			destroyUI(gameIter.getPairWord().getLevel());
+	    	//init game
+			initGame();
+			//Start game
+			startGame();
+			//Toast.makeText(LinguamApplication.getContext(),"Select language: "+ select_language.getTitle(), Toast.LENGTH_LONG).show();
 	    	drawerLayout.closeDrawer(drawerListView);
-
 	    }
 	}
 
-	
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -120,15 +138,11 @@ public class Game_Activity extends Activity {
 		drawerListViewLang = LinguamApplication.languageDB.getActiveLanguage();
 		// get ListView defined in activity_main.xml
 		drawerListView = (ListView) findViewById(R.id.left_drawer);
-       
 		adapter = new DrawableAdapter(LinguamApplication.getContext(), drawerListViewLang);
-		
 		 // Set the adapter for the list view
 		drawerListView.setAdapter(adapter);
-
 		// 2. App Icon 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
 		// 2.1 create ActionBarDrawerToggle
 		actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -140,13 +154,14 @@ public class Game_Activity extends Activity {
 
         // 2.2 Set actionBarDrawerToggle as the DrawerListener
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        
+        //Change Title
+    	android.app.ActionBar ab = getActionBar();
+	    ab.setTitle(Util.getActionBarTitle());
+	    ab.setSubtitle(Util.getSelectedLanguage().getSubtitle()); 
         // 2.3 enable and show "up" arrow
         getActionBar().setDisplayHomeAsUpEnabled(true); 
-        
         // just styling option
 		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		
 		drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 		
 		// Init UI
@@ -154,13 +169,109 @@ public class Game_Activity extends Activity {
 		this.tvTotalScore = (TextView)findViewById(R.id.tvScore);
 		this.tvWordLevel = (TextView)findViewById(R.id.tvLevel);
 		
+		//init top buttons
+		//Get id of buttons to set texts
+		this.btn_top1 = (Button)findViewById(R.id.btn_level1_top);
+		this.btn_top2 = (Button)findViewById(R.id.btn_level2_top);
+		this.btn_top3 = (Button)findViewById(R.id.btn_level3_top);
+		this.btn_top4 = (Button)findViewById(R.id.btn_level4_top);
+		this.btn_top5 = (Button)findViewById(R.id.btn_level5_top);
+		
+		setMapButtonToLevel();	
+		
+		btn_top1.setOnClickListener(new OnClickListener() {
+
+		    public void onClick(View button) {
+		        //Set the button's appearance
+		    	btn_top3.setSelected(false);
+		    	btn_top2.setSelected(false);
+		    	btn_top4.setSelected(false);
+		    	btn_top5.setSelected(false);
+		        button.setSelected(true);
+		        
+		        if (button.isSelected()) {
+		        	destroyUI(getCurrentLevel());
+		        	run(listGoToLevel(1));
+		        }
+		    }
+		});
+		
+		btn_top2.setOnClickListener(new OnClickListener() {
+
+		    public void onClick(View button) {
+		        //Set the button's appearance
+		    	btn_top1.setSelected(false);
+		    	btn_top3.setSelected(false);
+		    	btn_top4.setSelected(false);
+		    	btn_top5.setSelected(false);
+		    	button.setSelected(true);
+		        
+		        if (button.isSelected()) {
+		        	destroyUI(getCurrentLevel());
+		        	run(listGoToLevel(2));
+		        }
+		    }
+		});
+		
+		
+		btn_top3.setOnClickListener(new OnClickListener() {
+
+		    public void onClick(View button) {
+		        //Set the button's appearance
+		    	btn_top1.setSelected(false);
+		    	btn_top2.setSelected(false);
+		    	btn_top4.setSelected(false);
+		    	btn_top5.setSelected(false);
+		    	button.setSelected(true);
+		        
+		        if (button.isSelected()) {
+		        	destroyUI(getCurrentLevel());
+		        	run(listGoToLevel(3));
+		        }
+		    }
+		});
+		
+		btn_top4.setOnClickListener(new OnClickListener() {
+
+		    public void onClick(View button) {
+		        //Set the button's appearance
+		    	btn_top1.setSelected(false);
+		    	btn_top2.setSelected(false);
+		    	btn_top3.setSelected(false);
+		    	btn_top5.setSelected(false);
+		    	button.setSelected(true);
+		        
+		        if (button.isSelected()) {
+		        	destroyUI(getCurrentLevel());
+		        	run(listGoToLevel(4));
+		        }
+		    }
+		});
+		
+		btn_top5.setOnClickListener(new OnClickListener() {
+
+		    public void onClick(View button) {
+		        //Set the button's appearance
+		    	btn_top1.setSelected(false);
+		    	btn_top2.setSelected(false);
+		    	btn_top3.setSelected(false);
+		    	btn_top4.setSelected(false);
+		    	button.setSelected(true);
+		        
+		        if (button.isSelected()) {
+		        	destroyUI(getCurrentLevel());
+		        	run(listGoToLevel(5));
+		        }
+		    }
+		});
 		
 		//init game
 		initGame();
 		//Start game
 		startGame();
 	}
-	
+
+
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	    // Inflate the menu items for use in the action bar
@@ -176,6 +287,7 @@ public class Game_Activity extends Activity {
 		this.gameEngine.init();
 		this.iterWords = gameEngine.getGameDataList().iterator();
 	}
+
 	
 	/**
 	 * Init of game
@@ -191,6 +303,8 @@ public class Game_Activity extends Activity {
 		}
 
 		if (gameIter != null){
+			//Mark label of current button
+			setButtonToLevel(gameIter.getPairWord().getLevel());
 			//Start the game
 			run(gameIter);
 		}else{
@@ -215,13 +329,13 @@ public class Game_Activity extends Activity {
 	 */
 	private void run(GameData word){
 
-		totalScore = LinguamApplication.statisticDB.getScore();
+		totalScore = LinguamApplication.statisticDB.getScore(LinguamApplication.getSelectedLanguage().getId());
 		
 		//Setting word to ask
 		tvGamingWord.setText(word.getPairWord().getOriginalWord().toUpperCase(Locale.US));
 		tvTotalScore.setText(getResources().getString(R.string.score) + " " + totalScore);
 		tvWordLevel.setText(getResources().getString(R.string.level) + " " + word.getPairWord().getLevel());
-		
+				
 		//Setting views for each group of level
 		if (word.getPairWord().getLevel() == 1 || word.getPairWord().getLevel() == 2){
 			
@@ -281,28 +395,28 @@ public class Game_Activity extends Activity {
 
 		if (correct){
 			//Update level
-			LinguamApplication.translatedWordDB.updateLevel(gameStat.getPairWord().getTranslateWord(),gameStat.getPairWord().getLevel() + 1);
+			LinguamApplication.translatedWordDB.updateLevel(gameStat.getPairWord().getTranslateWord(),gameStat.getPairWord().getLevel() + 1,LinguamApplication.getSelectedLanguage().getId());
 			//Update score
 			int currentScore = LinguamApplication.CONSTANT_SCORE * gameStat.getPairWord().getLevel();
 			int scoreToUpdate = totalScore + currentScore;
-			LinguamApplication.statisticDB.updateScore(scoreToUpdate);
+			LinguamApplication.statisticDB.updateScore(scoreToUpdate,LinguamApplication.getSelectedLanguage().getId());
 			//Correct answer
 			Log.v(TAG,getResources().getString(R.string.correct) + "(+"+ currentScore +" points)");
 			
 			Toast correctToast = Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.correct) + "(+"+ currentScore +" points)", Toast.LENGTH_SHORT);
 			View view = correctToast.getView();
-			view.setBackgroundColor(getResources().getColor(R.color.Green));
+			view.setBackgroundColor(getResources().getColor(R.color.GreenKuler));
 			correctToast.show();
 			
 		}else{
 			Toast incorrectToast = null;
 			if (gameStat.getPairWord().getLevel() > 1) 
 				//Update level
-				LinguamApplication.translatedWordDB.updateLevel(gameStat.getPairWord().getTranslateWord(),gameStat.getPairWord().getLevel() - 1);
+				LinguamApplication.translatedWordDB.updateLevel(gameStat.getPairWord().getTranslateWord(),gameStat.getPairWord().getLevel() - 1,LinguamApplication.getSelectedLanguage().getId());
 				//Update score
 				int currentScore = LinguamApplication.CONSTANT_SCORE * gameStat.getPairWord().getLevel();
 				int scoreToUpdate = totalScore == 0 ? 0 : totalScore - currentScore;
-				LinguamApplication.statisticDB.updateScore(scoreToUpdate);
+				LinguamApplication.statisticDB.updateScore(scoreToUpdate,LinguamApplication.getSelectedLanguage().getId());
 				//Incorrect answer
 				Log.v(TAG,getResources().getString(R.string.incorrect)+ "(-"+ currentScore +" points)");
 				
@@ -310,7 +424,7 @@ public class Game_Activity extends Activity {
 						getResources().getString(R.string.correct_asnwer) +" "+ gameStat.getPairWord().getTranslateWord().toUpperCase()
 						, Toast.LENGTH_SHORT);
 				View view = incorrectToast.getView();
-				view.setBackgroundColor(getResources().getColor(R.color.Red));
+				view.setBackgroundColor(getResources().getColor(R.color.RedKuler));
 				incorrectToast.show();
 		}
 		
@@ -612,4 +726,50 @@ public class Game_Activity extends Activity {
 		}
 	}
 
+	private synchronized GameData listGoToLevel(int level) {
+		
+		initGame();
+		GameData word;
+		while(iterWords.hasNext()){
+			 word = nextWord();
+			 setButtonToLevel(word.getPairWord().getLevel());
+			 if (word.getPairWord().getLevel() == level){
+				 return word;
+			 }else if (word.getPairWord().getLevel() > level){
+				 return word;
+			 }
+		}
+		//If there are no results, return whole stack
+		initGame();
+		word = nextWord();
+		setButtonToLevel(word.getPairWord().getLevel());
+		return word;
+		
+	}
+	
+	private void setMapButtonToLevel() {
+		levelButtonMapping = new HashMap<Integer, Integer>();
+		levelButtonMapping.put(1, R.id.btn_level1_top);
+		levelButtonMapping.put(2, R.id.btn_level2_top);	
+		levelButtonMapping.put(3, R.id.btn_level3_top);	
+		levelButtonMapping.put(4, R.id.btn_level4_top);	
+		levelButtonMapping.put(5, R.id.btn_level5_top);	
+	}	
+	
+	private void setButtonToLevel(int level) {
+		
+		this.level = level;
+		for (Integer key : levelButtonMapping.keySet()) {
+			if (key != level){
+				findViewById(levelButtonMapping.get(key)).setSelected(false);
+			}
+		}
+		
+		findViewById(levelButtonMapping.get(level)).setSelected(true);
+	}
+	
+	private int getCurrentLevel() {
+		return this.level;
+	}
+	
 }

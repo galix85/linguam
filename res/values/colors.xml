@@ -140,5 +140,12 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="GreenKuler">#39BCA4</color>
+    <color name="RedKuler">#E75244</color>
+    <color name="GreyKuler">#4C565E</color>
+    <color name="WhiteKuler">#F1EEDA</color>
+    <color name="GreySoft">#C7C3C7</color>
+    <color name="GreySelected">#696769</color>
+    
 
 </resources>

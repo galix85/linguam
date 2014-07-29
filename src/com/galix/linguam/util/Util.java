@@ -1,6 +1,7 @@
 package com.galix.linguam.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
@@ -9,14 +10,21 @@ import java.util.Set;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.galix.linguam.LinguamApplication;
+import com.galix.linguam.R;
+import com.galix.linguam.pojo.Language;
 import com.galix.linguam.pojo.Term;
 
 public class Util {
 
+	static HashMap<String, Integer> langMapping = new HashMap<String, Integer>();
+	
 	public static int randomNumber(int min, int max) {
 		Random rand = new Random();
 		return rand.nextInt(max - min + 1) + min;
@@ -41,8 +49,7 @@ public class Util {
 				numbers.add(randNo[k]);
 			}
 		}
-		return numbers;
-	}
+		return numbers;	}
 
 	
 	@SuppressWarnings("deprecation")
@@ -66,6 +73,13 @@ public class Util {
 		
 	}
 	
+	public static boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) LinguamApplication.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+	
 	public static String trimWord(String originalWord) {
 		
 		String[] originalWordArray = originalWord.split(",");
@@ -83,5 +97,31 @@ public class Util {
 		originalList.addAll(setItems);
 		
 		return originalList;
+	}
+	
+	public static String getActionBarTitle() {
+		
+		populateLangMapping();
+		Language selectedLanguage = LinguamApplication.languageDB.getSelectedLanguage();
+		if (langMapping.containsKey(selectedLanguage.getLangFrom())){
+			return LinguamApplication.getContext().getResources().getString(langMapping.get(selectedLanguage.getLangFrom()));
+		}else{
+			return "Playing with: " + selectedLanguage.getTitle();
+		}
+		
+	}
+	
+	public static Language getSelectedLanguage() {
+		return LinguamApplication.languageDB.getSelectedLanguage();
+	}
+	
+	private static void populateLangMapping(){
+		
+		langMapping.put("es", R.string.es);
+		langMapping.put("en", R.string.en);
+		langMapping.put("pt", R.string.pt);
+		langMapping.put("it", R.string.it);
+		langMapping.put("fr", R.string.fr);
+	
 	}
 }

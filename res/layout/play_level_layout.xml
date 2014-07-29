@@ -1,0 +1,135 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    
+    <LinearLayout
+	android:id="@+id/linearLayout_all"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+	    
+	    <LinearLayout
+	        	android:id="@+id/linearLayout1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom ="40dp"
+	            android:layout_marginTop ="40dp"
+	            android:orientation="horizontal" >z
+	
+	            <Button
+	                android:id="@+id/level1"
+	                android:layout_width="158dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.64"
+	                android:background="@android:color/transparent"
+			        android:drawableTop="@drawable/ic_game_activity"
+			        android:onClick="to_play_activity"
+			        android:text="@string/level1"
+	                android:textColor="#000000" />
+	            
+	             <Button
+	                android:id="@+id/level2"
+	                android:layout_width="158dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.64"
+	                android:background="@android:color/transparent"
+			        android:drawableTop="@drawable/ic_game_activity"
+			        android:onClick="to_play_activity"
+			        android:text="@string/level2"
+	                android:textColor="#000000" />
+	            
+	        
+	     </LinearLayout>
+	    <LinearLayout
+	        	android:id="@+id/linearLayout2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom ="40dp"
+	            android:layout_marginTop ="40dp"
+	            android:orientation="horizontal" >
+	
+	            <Button
+	                android:id="@+id/level3"
+	                android:layout_width="158dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.64"
+	                android:background="@android:color/transparent"
+			        android:drawableTop="@drawable/ic_game_activity"
+			        android:onClick="to_play_activity"
+			        android:text="@string/level3"
+	                android:textColor="#000000" />
+	            
+	            
+	             <Button
+	                android:id="@+id/level4"
+	                android:layout_width="158dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.64"
+	                android:background="@android:color/transparent"
+			        android:drawableTop="@drawable/ic_game_activity"
+			        android:onClick="to_play_activity"
+			        android:text="@string/level4"
+	                android:textColor="#000000" />
+	            
+	        
+	     </LinearLayout>
+	     <LinearLayout
+	        	android:id="@+id/linearLayout3"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom ="40dp"
+	            android:layout_marginTop ="40dp"
+	            android:orientation="horizontal" >
+	
+	            <Button
+	                android:id="@+id/level5"
+	                android:layout_width="158dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.64"
+	                android:background="@android:color/transparent"
+			        android:drawableTop="@drawable/ic_game_activity"
+			        android:onClick="to_play_activity"
+			        android:text="@string/level5"
+	                android:textColor="#000000" />
+	            
+	            
+	             <Button
+	                android:id="@+id/all_in"
+	                android:layout_width="158dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.64"
+	                android:background="@android:color/transparent"
+			        android:drawableTop="@drawable/ic_game_activity"
+			        android:onClick="to_play_activity"
+			        android:text="@string/all_together"
+	                android:textColor="#000000" />
+	            
+
+	     </LinearLayout>
+    
+    </LinearLayout> 
+     
+    <!-- The main content view -->
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
+    
+    <!-- The navigation drawer -->
+    <ListView android:id="@+id/left_drawer"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="#666"
+        android:dividerHeight="1dp"
+        android:background="@android:color/white"
+        android:paddingLeft="15sp"
+        android:paddingRight="15sp"
+        />
+    
+</android.support.v4.widget.DrawerLayout>

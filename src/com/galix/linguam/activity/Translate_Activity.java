@@ -67,6 +67,7 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
 	
 	private String langFrom = null;
 	private String langTo = null;
+	private int langRefId;
 	
 	private List<Language> drawerListViewLang;
     private DrawerLayout drawerLayout;
@@ -103,21 +104,34 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
 		this.langTo = langTo;
 	}
 	
+	public int getLangRefId() {
+		return langRefId;
+	}
+
+	public void setLangRefId(int langRefId) {
+		this.langRefId = langRefId;
+	}
+	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 	    @Override
 	    public void onItemClick(AdapterView parent, View view, int position, long id) {
 	    	
+	    	InputMethodManager imm = (InputMethodManager)getSystemService(LinguamApplication.getContext().INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+	    	
 	    	Language select_language = drawerListViewLang.get(position);
 	    	LinguamApplication.languageDB.setSelectedLanguage(select_language.getId());
 	    
-	    	Toast.makeText(LinguamApplication.getContext(),"Select language: "+ select_language.getTitle(), Toast.LENGTH_LONG).show();
+	    	//Change Title
+	    	android.app.ActionBar ab = getActionBar();
+		    ab.setTitle(Util.getActionBarTitle());
+		    ab.setSubtitle(Util.getSelectedLanguage().getSubtitle()); 
+	    	
 	    	drawerLayout.closeDrawer(drawerListView);
 
 	    }
 	}
 
-	
-	
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -185,6 +199,11 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
                 );
+        
+		//Change Title
+    	android.app.ActionBar ab = getActionBar();
+	    ab.setTitle(Util.getActionBarTitle());
+	    ab.setSubtitle(Util.getSelectedLanguage().getSubtitle()); 
 
         // 2.2 Set actionBarDrawerToggle as the DrawerListener
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
@@ -225,13 +244,17 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
 
 					word_to_translate = URLEncoder.encode(etTranslateCaption
 							.getText().toString(), "UTF-8");
-					if (!word_to_translate.equals("")) {
+					if (!word_to_translate.equals("") && Util.isNetworkAvailable()) {
 						// Make visible progress icon
 						setProgressBarIndeterminateVisibility(Boolean.TRUE);
 						// Hide keyboard
 						imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 						// Call to Translate Method
 						getTranslation(word_to_translate);
+					}else if(!Util.isNetworkAvailable()){
+						//no_internet_connection
+						Toast.makeText(LinguamApplication.getContext(), getResources().getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
+						Log.v(TAG, "No internet connection");
 					}
 
 				} catch (UnsupportedEncodingException e) {
@@ -307,7 +330,7 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
 	
 		originalWord.setTerm(Util.trimWord(originalWord.getTerm()));
 		OriginalWord newOriginalWord = LinguamApplication.originalWordDB
-				.createOriginalWord(originalWord);
+				.createOriginalWord(originalWord,getLangRefId());
 		return newOriginalWord;
 	}
 
@@ -315,7 +338,7 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
 			Term originalWord) {
 		translateWord.setTerm(Util.trimWord(translateWord.getTerm()));
 		return LinguamApplication.translatedWordDB.createTranslation(
-				translateWord, true, originalWord.getTerm());
+				translateWord, true, originalWord.getTerm(),getLangRefId());
 	}
 
 	private void saveOtherTranslationWord(List<Term> translateWord,
@@ -324,7 +347,7 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
 		for (Term term : translateWord) {
 			term.setTerm(Util.trimWord(term.getTerm()));
 			LinguamApplication.translatedWordDB.createTranslation(term, false,
-					originalWord.getTerm());
+					originalWord.getTerm(),getLangRefId());
 		}
 
 	}
@@ -460,7 +483,8 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
         //Set langs
         setLangFrom(language.getLangFrom());
         setLangTo(language.getLangTo());
-       
+        setLangRefId(language.getId());
+        
         // Showing selected spinner item
         Log.v(TAG ,"Lang to translate: " + language.getLangFrom() + " to " + language.getLangTo());
  
@@ -471,5 +495,7 @@ public class Translate_Activity extends ListActivity implements OnItemSelectedLi
         // TODO Auto-generated method stub
  
     }
+
+
 
 }

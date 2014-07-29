@@ -36,7 +36,7 @@ public class TranslationDBAdapter {
 		database = dbHelper.getWritableDatabase(); 
 	}
 
-	public TranslatedWord createTranslation(Term translation,boolean selected,String originalword) {
+	public TranslatedWord createTranslation(Term translation,boolean selected,String originalword,int refLang) {
 
 		ContentValues values = new ContentValues();
 		
@@ -52,6 +52,7 @@ public class TranslationDBAdapter {
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_SELECTED,
 			    selected ? 1 : 0);
 		values.put(MySQLiteHelper.COLUMN_TRANSLATION_LEVEL,1);
+		values.put(MySQLiteHelper.COLUMN_TRANSLATION_REF_LANG,refLang);
 
 		if (!exist(translation.getTerm(),translation.getPOS(),translation.getSense())){
 			
@@ -80,12 +81,16 @@ public class TranslationDBAdapter {
 				MySQLiteHelper.COLUMN_TRANSLATION_ID + " = " + id, null);
 	}
 
-	public List<TranslatedWord> getAllTranslates() {
+	public List<TranslatedWord> getAllTranslates(int refLang) {
 		
 		List<TranslatedWord> translationWords = new ArrayList<TranslatedWord>();
 
+		String selection = MySQLiteHelper.COLUMN_TRANSLATION_REF_LANG+"=?";
+    	String[] selectionArgs = {String.valueOf(refLang)};
+
+		
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_TRANSLATION,
-				allColumns, null, null, null, null,null);
+				allColumns,  selection, selectionArgs, null, null,null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -155,13 +160,12 @@ public class TranslationDBAdapter {
 		
 	}
 	
-	
-	public ArrayList<String> getPaddingWordList(String originalWord, int nWords) {
+	public ArrayList<String> getPaddingWordList(String originalWord, int nWords, int refLang) {
 
 		ArrayList<String> paddingWordList = new ArrayList<String>();
 		
-		String selection = "originalword!=? AND selected=?";
-    	String[] selectionArgs = {originalWord,"0"};
+		String selection = "originalword!=? AND selected=? AND " + MySQLiteHelper.COLUMN_TRANSLATION_REF_LANG+"=?";
+    	String[] selectionArgs = {originalWord,"0",String.valueOf(refLang)};
     	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
     	
     	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, "RANDOM() "); // limit "+nWords );
@@ -185,18 +189,19 @@ public class TranslationDBAdapter {
     	}
     	
 	}
-	
-	public ArrayList<PairWord> getPairWord() {
+
+	public ArrayList<PairWord> getPairWord(int refLang) {
 
 		ArrayList<PairWord> translationWords = new ArrayList<PairWord>();
 
+		/*
+		 * String.valueOf(refLang)
+		 * */
 		
-		String selection = "selected=? AND level<?";
-    	String[] selectionArgs = {"1","6"};
+    	String[] selectionArgs = {"1","6",String.valueOf(refLang)};
     	String tableName = MySQLiteHelper.TABLE_TRANSLATION;
     	
-    	//Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, "RANDOM() ");
-    	Cursor cursor = database.rawQuery("SELECT * FROM  (SELECT * FROM " + tableName +  " WHERE selected = ? AND level < ? ORDER BY RANDOM()) as PAIR ORDER BY level",selectionArgs);
+    	Cursor cursor = database.rawQuery("SELECT * FROM  (SELECT * FROM " + tableName +  " WHERE selected = ? AND level < ? AND ref_id_language = ? ORDER BY RANDOM()) as PAIR ORDER BY level",selectionArgs);
  
     	if (cursor.moveToFirst()){
     		  do {
@@ -214,12 +219,13 @@ public class TranslationDBAdapter {
     	
 	}
 
-	public void updateLevel(String word, int level){
+	public void updateLevel(String word, int level,int refLang){
 		
 		ContentValues cv = new ContentValues();
 		cv.put(MySQLiteHelper.COLUMN_TRANSLATION_LEVEL,level);
+		
 		database.update(MySQLiteHelper.TABLE_TRANSLATION,cv, MySQLiteHelper.COLUMN_TRANSLATION_TERM +" like '"+ word +"' AND " + 
-		MySQLiteHelper.COLUMN_TRANSLATION_SELECTED +" = "+ 1 ,null);
+		MySQLiteHelper.COLUMN_TRANSLATION_SELECTED +" = "+ 1 + " AND " + MySQLiteHelper.COLUMN_TRANSLATION_REF_LANG + " = "+ String.valueOf(refLang),null);
 	}
 	
 	public void open() throws SQLException {

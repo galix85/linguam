@@ -22,29 +22,33 @@ public class StatisticDBAdapter {
 		database = dbHelper.getWritableDatabase(); 
 	}
 
-	public void updateScore (int score) {
+	public void updateScore (int score,int refLang) {
 		//database.execSQL("INSERT OR REPLACE INTO " + MySQLiteHelper.TABLE_STATISTICS + "  ("+ MySQLiteHelper.COLUMN_STATISTICS_SCORE +") VALUES ("+score+")");
 	
 		ContentValues values = new ContentValues();
 		values.put(MySQLiteHelper.COLUMN_STATISTICS_SCORE, score);
+		values.put(MySQLiteHelper.COLUMN_STATISTICS_REF_LANG, refLang);
 		
 		if (!exist()){
 			database.insertWithOnConflict(MySQLiteHelper.TABLE_STATISTICS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 			Log.v(TAG, "Score insterted to: " + score);
 		}else{
-			database.update(MySQLiteHelper.TABLE_STATISTICS, values, null, null);
+			database.update(MySQLiteHelper.TABLE_STATISTICS, values, MySQLiteHelper.COLUMN_STATISTICS_REF_LANG +" = "+ refLang, null);
 			Log.v(TAG, "Score updated to: " + score);
 		}
 		
 		
 	}
 
-	public int getScore(){
+	public int getScore(int refLang){
 		
 		int score = 0;
     	String tableName = MySQLiteHelper.TABLE_STATISTICS;
     	
-    	Cursor cursor = database.query(tableName, null, null, null, null, null, null);
+    	String selection = MySQLiteHelper.COLUMN_STATISTICS_REF_LANG+"=?";
+    	String[] selectionArgs = {String.valueOf(refLang)};
+    	
+    	Cursor cursor = database.query(tableName, null, selection, selectionArgs, null, null, null);
     	if (cursor != null && cursor.getCount() > 0){
     		cursor.moveToFirst();
 	    	score = cursor.getInt(0);

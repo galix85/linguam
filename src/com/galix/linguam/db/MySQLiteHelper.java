@@ -28,6 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_TRANSLATION_ORIGINALWORD = "originalword";
 	public static final String COLUMN_TRANSLATION_SELECTED = "selected";
 	public static final String COLUMN_TRANSLATION_LEVEL = "level";
+	public static final String COLUMN_TRANSLATION_REF_LANG = "ref_id_language";
 
 	public static final String TABLE_ORIGINALWORD = "originalword";
 	public static final String COLUMN_ORIGINALWORD_ID = "_id";
@@ -35,9 +36,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_ORIGINALWORD_POS = "pos";
 	public static final String COLUMN_ORIGINALWORD_SENSE = "sense";
 	public static final String COLUMN_ORIGINALWORD_USAGE = "usage";
+	public static final String COLUMN_ORIGINALWORD_REF_LANG = "ref_id_language";
 	
 	public static final String TABLE_STATISTICS = "statitstics";
 	public static final String COLUMN_STATISTICS_SCORE = "score";
+	public static final String COLUMN_STATISTICS_REF_LANG = "ref_id_language";
 
 	public static final String TABLE_LANGUAGE = "language";
 	public static final String COLUMN_LANGUAGE_ID = "_id";
@@ -50,7 +53,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_LANGUAGE_IMG_SRC = "imgSrc";
 	
 	private static final String DATABASE_NAME = "linguam.db";
-	private static final int DATABASE_VERSION = 13;
+	private static final int DATABASE_VERSION = 16;
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_TRANSLATION = "create table "
@@ -61,7 +64,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ COLUMN_TRANSLATION_USAGE + " text" + ", "
 			+ COLUMN_TRANSLATION_ORIGINALWORD + " text" + ", "
 			+ COLUMN_TRANSLATION_SELECTED + " integer" + ", "
-			+ COLUMN_TRANSLATION_LEVEL + " integer);";
+			+ COLUMN_TRANSLATION_LEVEL + " integer" + ","
+			+ COLUMN_TRANSLATION_REF_LANG + " integer);";
 
 	// Database creation sql statement
 	private static final String CREATE_TABLE_ORIGINALWORD = "create table "
@@ -69,12 +73,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ " integer primary key autoincrement, " + COLUMN_ORIGINALWORD_TERM
 			+ " text not null" + ", " + COLUMN_ORIGINALWORD_POS + " text"
 			+ ", " + COLUMN_ORIGINALWORD_SENSE + " text" + ", "
-			+ COLUMN_ORIGINALWORD_USAGE + " text);";
+			+ COLUMN_ORIGINALWORD_USAGE + " text" + ","
+			+ COLUMN_ORIGINALWORD_REF_LANG + " integer);";
 	
 	// Database creation sql statement
 	private static final String CREATE_TABLE_STATISTICS = "create table "
-				+ TABLE_STATISTICS + "(" + COLUMN_STATISTICS_SCORE
-				+ " integer);";
+				+ TABLE_STATISTICS + "(" + COLUMN_STATISTICS_SCORE+ " integer" + ","
+				+ COLUMN_STATISTICS_REF_LANG + " integer);";
 	
 	// Database creation sql statement
 	private static final String CREATE_TABLE_LANGUAGE = "create table "
@@ -131,18 +136,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			        
 			    	String[] rowData = reader.split(",");
 			        
-			        ContentValues values = new ContentValues();
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_ID, count);
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_FROM, rowData[0]);//from
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_TO, rowData[1]);//to
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_TITLE, rowData[2]);//title
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_SUBTITLE, rowData[3]);//subtitle
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_ACTIVE, rowData[4]);//active
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_SELECTED, rowData[5]);//selected
-			        values.put(MySQLiteHelper.COLUMN_LANGUAGE_IMG_SRC, rowData[6]);//img_src
-			        
+			        ContentValues values_language = new ContentValues();
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_ID, count);
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_FROM, rowData[0]);//from
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_TO, rowData[1]);//to
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_TITLE, rowData[2]);//title
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_SUBTITLE, rowData[3]);//subtitle
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_ACTIVE, rowData[4]);//active
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_SELECTED, rowData[5]);//selected
+			        values_language.put(MySQLiteHelper.COLUMN_LANGUAGE_IMG_SRC, rowData[6]);//img_src
+			       			        
 			        db.insert(MySQLiteHelper.TABLE_LANGUAGE,
-							null, values);
+							null, values_language);
+			        
+			        ContentValues values_statistics = new ContentValues();
+			        values_statistics.put(MySQLiteHelper.COLUMN_STATISTICS_REF_LANG, count);
+			        values_statistics.put(MySQLiteHelper.COLUMN_STATISTICS_SCORE, 0);
+			        
+			        db.insert(MySQLiteHelper.TABLE_STATISTICS,
+							null, values_statistics);
 			        
 			        count ++; //Increment count
 			    }
