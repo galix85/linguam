@@ -9,7 +9,7 @@
        android:layout_height="wrap_content"
        android:baselineAligned="false"
        android:orientation="vertical" >
-	    
+	   
 	   <LinearLayout
 	        android:id="@+id/LinearLayout_top"
 	        android:layout_width="match_parent"

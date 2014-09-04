@@ -732,10 +732,11 @@ public class Game_Activity extends Activity {
 		GameData word;
 		while(iterWords.hasNext()){
 			 word = nextWord();
-			 setButtonToLevel(word.getPairWord().getLevel());
 			 if (word.getPairWord().getLevel() == level){
+				 setButtonToLevel(word.getPairWord().getLevel());
 				 return word;
 			 }else if (word.getPairWord().getLevel() > level){
+				 setButtonToLevel(word.getPairWord().getLevel());
 				 return word;
 			 }
 		}

@@ -13,6 +13,7 @@ import com.galix.linguam.util.Util;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 
 public class LinguamApplication extends Application {
@@ -74,6 +75,16 @@ public class LinguamApplication extends Application {
 		
 	public static Language getSelectedLanguage(){
 		return selectedLanguage;
+	}
+	
+	public static String getAppVersion(){
+		try {
+			return appContext.getPackageManager()
+				    .getPackageInfo(appContext.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
 

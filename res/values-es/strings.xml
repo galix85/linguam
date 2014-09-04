@@ -19,7 +19,7 @@
     <!-- Main Activity icon text -->
     <string name="ictext_search">Busca tus palabras</string>
     <string name="ictext_play">Vamos a jugar</string>
-    <string name="no_words">Como mínimo necesitas 10 palabras para jugar</string>
+    <string name="no_words">Necesitas un mínimo de 10 palabras para jugar</string>
     
     <!-- Play Button Strings  -->
     <string name="playgame_button">Jugar</string>
@@ -28,16 +28,21 @@
     <string name="no_more_words">Guau! Eres increible, por favor busca más palabras para continuar jugando</string>
     <string name="correct">CORRECTO</string>
     <string name="incorrect">INCORRECTO</string>
-    <string name="correct_asnwer">OPCIÓN CORRECTA --></string>
+    <string name="correct_asnwer">OPCIÓN CORRECTA:</string>
     
     <!--  Score Strings -->
 	<string name="score">PUNTUACIÓN:</string>
 	<string name="level">NIVEL PALABRA:</string>
 	
 	<!--  Drawable Menu & Action Bar Title -->
-	<string name="select_language">Selecciona idioma para jugar</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="select_language">Selecciona idioma para jugar</string>
+    <string name="spanish_speaker">Para castellanohablantes</string>
+	<string name="french_speaker">Pour francophone</string>
+	<string name="italian_speaker">Per italofoni</string>
+	<string name="english_speaker">For english speaker</string>
+	<string name="portuguese_speaker">Para falantes de português</string>
     
     <!--  Language Mapping -->
     <string name="es">Vocab. Español</string>
@@ -46,4 +51,12 @@
     <string name="en">Vocab. Inglés</string>
     <string name="pt">Vocab. Portugués</string>
 
+     <!--  Levels -->
+    <string name="level1">Nivel1</string>
+    <string name="level2">Nivel2</string>
+    <string name="level3">Nivel3</string>
+    <string name="level4">Nivel4</string>
+    <string name="level5">Nivel5</string>
+    <string name="all_together">Todo</string>
+    
 </resources>
